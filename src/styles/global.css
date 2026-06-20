@@ -67,6 +67,19 @@
   text-decoration-color: var(--color-accent);
 }
 
+/* Emphasized inline link — dark-red accent, clearly clickable.
+   The `.body a.link-accent` selector outranks the default `.body a` above. */
+.body a.link-accent,
+a.link-accent {
+  color: var(--color-accent);
+  text-decoration-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
+}
+
+.body a.link-accent:hover,
+a.link-accent:hover {
+  text-decoration-color: var(--color-accent);
+}
+
 /* ---------------------------------------------------------------------------
    Components / patterns
 --------------------------------------------------------------------------- */
