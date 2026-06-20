@@ -16,8 +16,13 @@ import InstagramEmbeds from "../components/InstagramEmbeds.astro";
     </p>
   </PageHeader>
 
-  <!-- FEATURED VIDEO -->
-  <figure class="m-0 mt-10">
+  <!-- INSTAGRAM REELS -->
+  <div class="mt-10">
+    <InstagramEmbeds />
+  </div>
+
+  <!-- HS PROJECT VIDEO (bottom of page) -->
+  <figure class="m-0 mt-12">
     <div class="overflow-hidden rounded-xl border border-line bg-black">
       <video
         class="block aspect-video w-full"
@@ -31,11 +36,6 @@ import InstagramEmbeds from "../components/InstagramEmbeds.astro";
         (your browser can't play it inline).
       </video>
     </div>
-    <figcaption class="eyebrow mt-2">music video · director + producer</figcaption>
+    <figcaption class="eyebrow mt-2">hs project</figcaption>
   </figure>
-
-  <!-- INSTAGRAM REELS -->
-  <div class="mt-12">
-    <InstagramEmbeds />
-  </div>
 </BaseLayout>
