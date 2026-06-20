@@ -13,20 +13,24 @@ const { class: className = "" } = Astro.props;
   aria-label="Social and contact links"
 >
   {
-    socialLinks.map((link) => (
-      <a
-        href={link.href}
-        rel="me noopener"
-        class="group inline-flex items-center text-[0.95rem] text-ink transition-colors hover:text-accent"
-      >
-        <span class="text-faint transition-colors group-hover:text-accent">
-          [
-        </span>
-        <span class="px-1.5">{link.label}</span>
-        <span class="text-faint transition-colors group-hover:text-accent">
-          ]
-        </span>
-      </a>
-    ))
+    socialLinks.map((link) => {
+      const external = link.href.startsWith("http");
+      return (
+        <a
+          href={link.href}
+          target={external ? "_blank" : undefined}
+          rel={external ? "me noopener noreferrer" : undefined}
+          class="group inline-flex items-center text-[0.95rem] text-ink transition-colors hover:text-accent"
+        >
+          <span class="text-faint transition-colors group-hover:text-accent">
+            [
+          </span>
+          <span class="px-1.5">{link.label}</span>
+          <span class="text-faint transition-colors group-hover:text-accent">
+            ]
+          </span>
+        </a>
+      );
+    })
   }
 </nav>
