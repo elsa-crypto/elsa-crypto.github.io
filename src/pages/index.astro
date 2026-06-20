@@ -1,0 +1,28 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Elsa — Home">
+  <h1>Hi, I'm Elsa 👋</h1>
+  <p class="lede">
+    I build things on the internet. This is my corner of the web — notes,
+    projects, and whatever I'm currently into.
+  </p>
+
+  <div class="button-row">
+    <a class="button" href="/projects">See my work</a>
+    <a class="button secondary" href="/about">About me</a>
+  </div>
+
+  <h2>Recent highlights</h2>
+  <ul class="card-list">
+    <li class="card">
+      <h3>Something I built</h3>
+      <p>A one-line description of a project or thing you're proud of.</p>
+    </li>
+    <li class="card">
+      <h3>Something I wrote</h3>
+      <p>A short note about a post, talk, or idea you want to surface here.</p>
+    </li>
+  </ul>
+</BaseLayout>
