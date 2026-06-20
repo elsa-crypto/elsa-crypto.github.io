@@ -1,40 +1,48 @@
 ---
-// Renders public Instagram posts/reels as playable embeds.
+// Renders public Instagram posts/reels as self-contained, playable iframe
+// cards (no external script, so they never fall back to a plain link).
 // Add links in src/data/instagram.ts.
 import { instagramPosts } from "../data/instagram";
 
 const hasPosts = instagramPosts.length > 0;
+
+// Turn a permalink into its embeddable URL: .../reel/ID/  ->  .../reel/ID/embed
+const toEmbed = (url: string) => `${url.endsWith("/") ? url : url + "/"}embed`;
 ---
 
 {
   hasPosts ? (
-    <div class="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2">
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
       {instagramPosts.map((post) => (
         <figure class="m-0">
           {post.caption && (
             <figcaption class="eyebrow mb-2">{post.caption}</figcaption>
           )}
-          <blockquote
-            class="instagram-media"
-            data-instgrm-permalink={post.url}
-            data-instgrm-version="14"
-            style="margin:0;width:100%;max-width:540px;"
-          >
-            <a href={post.url}>view on instagram →</a>
-          </blockquote>
+          <div class="instagram-card overflow-hidden rounded-xl border border-line bg-white">
+            <iframe
+              src={toEmbed(post.url)}
+              title={post.caption ?? "instagram reel"}
+              class="block w-full"
+              loading="lazy"
+              scrolling="no"
+              frameborder="0"
+              allowtransparency="true"
+              allowfullscreen
+              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+            />
+          </div>
         </figure>
       ))}
     </div>
   ) : (
-    <p class="max-w-prose text-muted italic">
-      instagram projects coming soon.
-    </p>
+    <p class="max-w-prose text-muted italic">instagram projects coming soon.</p>
   )
 }
 
-{/* Instagram's embed script turns the blockquotes above into playable cards. */}
-{
-  hasPosts && (
-    <script is:inline async src="https://www.instagram.com/embed.js" />
-  )
-}
+<style>
+  /* Height of the embed card. Instagram's reel embed renders the video plus a
+     header/footer; this fits it without an inner scrollbar. */
+  .instagram-card iframe {
+    height: 500px;
+  }
+</style>

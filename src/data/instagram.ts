@@ -5,7 +5,11 @@ export interface IGPost {
   caption?: string;
 }
 
-// Paste your PUBLIC Instagram project links here and they render as playable
-// embeds on /media. Order here = order on the page. Example:
-//   { url: "https://www.instagram.com/reel/Cxxxxxxxxx/", caption: "launch film" },
-export const instagramPosts: IGPost[] = [];
+// PUBLIC Instagram project links — they render as playable embed cards on
+// /media, in this order. Add a `caption` to label any of them.
+export const instagramPosts: IGPost[] = [
+  { url: "https://www.instagram.com/reel/DMdgJ25ym-y/" },
+  { url: "https://www.instagram.com/reel/DQsKUSlEqWh/" },
+  { url: "https://www.instagram.com/reel/DUUCja0EYrx/" },
+  { url: "https://www.instagram.com/reel/DZnZzgFBfBN/" },
+];
