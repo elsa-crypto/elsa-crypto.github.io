@@ -1,0 +1,33 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { thoughts } from "../../data/thoughts";
+
+export function getStaticPaths() {
+  return thoughts.map((t) => ({
+    params: { slug: t.slug },
+    props: { thought: t },
+  }));
+}
+
+const { thought } = Astro.props;
+---
+
+<BaseLayout title={`${thought.title} — Elsa Cai`} description={thought.body[0]}>
+  <article class="pt-12 sm:pt-16">
+    <a
+      href="/brain-dumps"
+      class="text-[0.9rem] text-muted transition-colors hover:text-accent"
+    >
+      ← brain dumps
+    </a>
+
+    {thought.date && <p class="eyebrow mt-6">{thought.date}</p>}
+    <h1 class="mt-2 text-[1.7rem] leading-[1.2] sm:text-[2rem]">
+      {thought.title}
+    </h1>
+
+    <div class="body mt-6 max-w-[40rem] space-y-4 text-[1.08rem] text-muted">
+      {thought.body.map((p) => <p>{p}</p>)}
+    </div>
+  </article>
+</BaseLayout>

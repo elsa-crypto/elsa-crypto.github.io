@@ -10,7 +10,8 @@ const links = [
 // Normalize the current path (drop trailing slash) so the active link can be
 // highlighted.
 const path = Astro.url.pathname.replace(/\/+$/, "") || "/";
-const isActive = (href: string) => path === href;
+const isActive = (href: string) =>
+  path === href || path.startsWith(href + "/");
 ---
 
 <header
