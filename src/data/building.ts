@@ -9,10 +9,11 @@ export interface BuildEntry {
   name: string;
   description: string;
   status: Status;
+  /** Optional external link — makes the project name clickable. */
+  href?: string;
 }
 
-// Things I'm building. Some are real projects, some are intentionally just
-// experiments — that's the point. Update the status as things evolve.
+// Things I'm building. Order here = order on /work.
 export const building: BuildEntry[] = [
   {
     name: "ditto internal tools",
@@ -21,27 +22,22 @@ export const building: BuildEntry[] = [
     status: "building",
   },
   {
-    name: "personal website",
-    description:
-      "a living index of my work, ideas, and progression from growth operator to technical builder.",
-    status: "you are here",
-  },
-  {
     name: "network by ditto",
+    href: "https://networkbyditto.com",
     description:
-      "an experimental networking product for college students based on interests, goals, personality, major, and industry — not dating.",
+      "an experimental networking product for college students based on interests. launched at usc demo day.",
     status: "experiment",
   },
   {
     name: "marketing stunt websites",
+    href: "https://ditto.ai/comp-gap",
     description:
-      "small, fast sites built around campaigns, launches, jokes, or internet experiments.",
+      "experimental website for marketing — drove a 40% MoM lift in website visits.",
     status: "ongoing",
   },
   {
-    name: "consumer social experiments",
-    description:
-      "prototypes exploring matchmaking, compatibility, online identity, and how people discover one another.",
-    status: "exploring",
+    name: "personal website",
+    description: "index for my personal growth.",
+    status: "you are here",
   },
 ];

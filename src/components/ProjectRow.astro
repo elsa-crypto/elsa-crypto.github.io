@@ -6,14 +6,30 @@ interface Props {
   name: string;
   description: string;
   status: Status;
+  href?: string;
 }
 
-const { name, description, status } = Astro.props;
+const { name, description, status, href } = Astro.props;
 ---
 
 <div class="row-hover border-b border-line py-4 last:border-b-0">
   <div class="flex items-baseline justify-between gap-4">
-    <h3 class="font-sans text-[1.05rem] font-medium text-ink">{name}</h3>
+    <h3 class="font-sans text-[1.05rem] font-medium text-ink">
+      {
+        href ? (
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="link-accent"
+          >
+            {name}
+          </a>
+        ) : (
+          name
+        )
+      }
+    </h3>
     <StatusBadge status={status} />
   </div>
   <p class="mt-1 max-w-prose text-[0.97rem] text-muted">{description}</p>
