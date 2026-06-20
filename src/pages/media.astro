@@ -16,7 +16,26 @@ import InstagramEmbeds from "../components/InstagramEmbeds.astro";
     </p>
   </PageHeader>
 
-  <div class="mt-10">
+  <!-- FEATURED VIDEO -->
+  <figure class="m-0 mt-10">
+    <div class="overflow-hidden rounded-xl border border-line bg-black">
+      <video
+        class="block aspect-video w-full"
+        controls
+        preload="none"
+        playsinline
+        poster="/videos/phs-nhs-music-video.jpg"
+      >
+        <source src="/videos/phs-nhs-music-video.mp4" type="video/mp4" />
+        <a href="/videos/phs-nhs-music-video.mp4">download the video</a>
+        (your browser can't play it inline).
+      </video>
+    </div>
+    <figcaption class="eyebrow mt-2">music video · director + producer</figcaption>
+  </figure>
+
+  <!-- INSTAGRAM REELS -->
+  <div class="mt-12">
     <InstagramEmbeds />
   </div>
 </BaseLayout>
