@@ -1,27 +1,15 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Intro from "../components/Intro.astro";
-import Section from "../components/Section.astro";
-
-import { now } from "../data/now";
 ---
 
 <BaseLayout>
   <Intro />
 
   <!-- CURRENTLY -->
-  <Section id="currently" title="currently" eyebrow="right now">
-    <div class="divide-y divide-line">
-      {
-        now.map((item) => (
-          <div class="row-hover flex flex-col gap-1 py-4 sm:flex-row sm:gap-6">
-            <h3 class="font-sans text-[1.02rem] font-medium text-ink sm:w-52 sm:shrink-0">
-              {item.label}
-            </h3>
-            <p class="max-w-prose text-muted">{item.body}</p>
-          </div>
-        ))
-      }
-    </div>
-  </Section>
+  <div class="mt-12 border-t border-line pt-8">
+    <p class="max-w-prose text-[1.08rem] text-muted">
+      <span class="text-ink">currently,</span> learning in the real world at sf.
+    </p>
+  </div>
 </BaseLayout>
