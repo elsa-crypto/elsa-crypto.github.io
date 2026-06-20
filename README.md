@@ -1,6 +1,9 @@
 # Personal Website
 
-My personal website, built with [Astro](https://astro.build).
+Elsa Cai's personal website — a single-page editorial index built with
+[Astro](https://astro.build) and [Tailwind CSS](https://tailwindcss.com).
+Most content lives in plain data files (`src/data/`) so it's easy to update
+without touching layout code.
 
 ## Prerequisites
 
@@ -31,25 +34,46 @@ npm run dev      # start the dev server at http://localhost:4321
 
 ```
 src/
-  components/    Reusable pieces (Nav, Footer)
-  layouts/       BaseLayout — the shared HTML shell every page uses
-  pages/         One file per route (index → /, about → /about, ...)
-  styles/        global.css — design tokens and all styling
-public/          Static files served as-is (favicon, images, etc.)
-astro.config.mjs Site config — set your real domain in `site`
+  data/          ← edit these to change content (plain TypeScript)
+    socialLinks.ts   your linkedin / x / instagram / email
+    now.ts           the "currently" section
+    projects.ts      "selected work" entries
+    building.ts      "things i'm building" entries + statuses
+    principles.ts    "things i believe"
+  components/    Reusable pieces (Header, Intro, Section, ProjectRow,
+                 WorkEntry, StatusBadge, SocialLinks, Footer)
+  layouts/       BaseLayout — shared HTML shell, <head>, SEO + fonts
+  pages/         index.astro — the single page (assembles all sections)
+  styles/        global.css — theme tokens (colors + fonts) and base styles
+public/          Static files served as-is (favicon, images, og image)
+astro.config.mjs Site config (domain) + Tailwind plugin
 ```
 
 ## How to edit
 
-- **Add a page:** create a new `.astro` file in `src/pages/`. The filename
-  becomes the URL (`src/pages/notes.astro` → `/notes`).
-- **Change content:** edit the page files in `src/pages/`. They're mostly plain
-  HTML.
-- **Restyle:** edit the CSS variables at the top of `src/styles/global.css`.
-- **Update nav:** edit the `links` array in `src/components/Nav.astro`.
+**Most edits = edit a file in `src/data/`.** They're typed lists; change the
+text, add an entry, reorder, done.
 
-Search the codebase for `Elsa`, `elsa@ditto.ai`, and `elsa-crypto` to find the
-placeholders to replace with your real details.
+- **Change what you do / build / believe:** edit `projects.ts`, `building.ts`,
+  `principles.ts`, `now.ts`.
+- **Update your links:** edit `src/data/socialLinks.ts`.
+- **Reword the intro:** edit `src/components/Intro.astro`.
+- **Restyle (colors, fonts):** edit the `@theme` tokens at the top of
+  `src/styles/global.css`.
+- **Edit the nav:** the `links` array in `src/components/Header.astro`.
+- **Add a real page later** (e.g. `/now`, `/work`): create
+  `src/pages/now.astro`. The filename becomes the URL.
+
+### Placeholders to fill in
+
+These are intentionally left as placeholders until you have verified info:
+
+- **Social handles** in `src/data/socialLinks.ts` (currently best-guess URLs).
+- **Metrics** — growth %, event attendance, social reach, follower counts.
+  They only appear once you add approved, publicly shareable numbers (see the
+  `placeholders` fields in `projects.ts` and the note in `index.astro`).
+- **Social preview image** — drop an `og.png` into `public/` for nicer link
+  previews.
 
 ## Deploying
 

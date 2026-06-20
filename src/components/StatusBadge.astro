@@ -1,0 +1,11 @@
+---
+import type { Status } from "../data/building";
+
+interface Props {
+  status: Status;
+}
+
+const { status } = Astro.props;
+---
+
+<span class="badge" data-status={status}>{status}</span>

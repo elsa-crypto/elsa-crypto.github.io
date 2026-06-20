@@ -1,239 +1,128 @@
+@import "tailwindcss";
+
 /* ---------------------------------------------------------------------------
-   Design tokens — edit these to restyle the whole site at once.
+   Theme tokens — Option A: editorial monochrome (warm off-white + dark red).
+   Edit these to restyle the whole site. Tailwind generates utilities from them
+   (e.g. bg-paper, text-ink, text-muted, border-line, text-accent, font-serif).
 --------------------------------------------------------------------------- */
-:root {
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
-    Helvetica, Arial, sans-serif;
-  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas,
-    monospace;
+@theme {
+  --color-paper: #f7f4ee; /* warm off-white background */
+  --color-ink: #1b1714; /* near-black, slightly warm */
+  --color-muted: #6f685e; /* muted warm gray (secondary text) */
+  --color-faint: #a39b8e; /* faintest text (metadata) */
+  --color-line: #e4ddd0; /* hairline separators */
+  --color-accent: #8a2b22; /* restrained dark red */
 
-  --bg: #ffffff;
-  --bg-subtle: #f6f7f9;
-  --text: #16181d;
-  --text-muted: #5b6470;
-  --border: #e6e8ec;
-  --accent: #3b5bdb;
-  --accent-hover: #2f49b0;
-
-  --max-width: 44rem;
-  --radius: 10px;
-  --space: 1rem;
+  --font-serif: "Instrument Serif", ui-serif, Georgia, "Times New Roman", serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0d0f12;
-    --bg-subtle: #15181d;
-    --text: #e8eaed;
-    --text-muted: #9aa3af;
-    --border: #262a31;
-    --accent: #7c93f5;
-    --accent-hover: #9aabf8;
+/* ---------------------------------------------------------------------------
+   Base — wrapped in @layer base so Tailwind utilities (e.g. font-sans) can
+   override element defaults like the serif heading font.
+--------------------------------------------------------------------------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-paper);
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    line-height: 1.04;
+    letter-spacing: 0.01em;
   }
 }
 
-/* ---------------------------------------------------------------------------
-   Base
---------------------------------------------------------------------------- */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  margin: 0;
-  font-family: var(--font-sans);
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.65;
-  -webkit-font-smoothing: antialiased;
-}
-
-.container {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 0 1.25rem;
-}
-
-main {
-  padding: 3rem 0 4rem;
-}
-
-h1,
-h2,
-h3 {
-  line-height: 1.2;
-  font-weight: 650;
-  letter-spacing: -0.01em;
-}
-
-h1 {
-  font-size: clamp(2rem, 5vw, 2.75rem);
-  margin: 0 0 0.5rem;
-}
-
-h2 {
-  font-size: 1.4rem;
-  margin: 2.5rem 0 1rem;
-}
-
-p {
-  color: var(--text);
-}
-
-a {
-  color: var(--accent);
-  text-decoration: none;
-}
-
-a:hover {
-  color: var(--accent-hover);
+/* Inline links inside running text */
+.prose-link,
+.body a {
+  color: var(--color-ink);
   text-decoration: underline;
+  text-decoration-color: var(--color-line);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.15s ease, color 0.15s ease;
 }
 
-.muted {
-  color: var(--text-muted);
-}
-
-/* ---------------------------------------------------------------------------
-   Header / nav
---------------------------------------------------------------------------- */
-.site-header {
-  border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-  backdrop-filter: blur(8px);
-  z-index: 10;
-}
-
-.site-header .container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 3.75rem;
-}
-
-.brand {
-  font-weight: 700;
-  color: var(--text);
-  font-size: 1.05rem;
-}
-
-.brand:hover {
-  text-decoration: none;
-  color: var(--accent);
-}
-
-.nav-links {
-  display: flex;
-  gap: 1.25rem;
-}
-
-.nav-links a {
-  color: var(--text-muted);
-  font-size: 0.95rem;
-}
-
-.nav-links a:hover,
-.nav-links a[aria-current="page"] {
-  color: var(--text);
-  text-decoration: none;
+.prose-link:hover,
+.body a:hover {
+  color: var(--color-accent);
+  text-decoration-color: var(--color-accent);
 }
 
 /* ---------------------------------------------------------------------------
-   Components
+   Components / patterns
 --------------------------------------------------------------------------- */
-.lede {
-  font-size: 1.15rem;
-  color: var(--text-muted);
-  max-width: 36rem;
+
+/* Small uppercase section eyebrow */
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-faint);
 }
 
-.button-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-top: 1.75rem;
+/* A row that translates slightly on hover (project / link rows) */
+.row-hover {
+  transition: transform 0.18s ease;
+}
+.row-hover:hover {
+  transform: translateX(4px);
 }
 
-.button {
-  display: inline-block;
-  padding: 0.6rem 1.1rem;
-  border-radius: var(--radius);
-  background: var(--accent);
-  color: #fff;
-  font-weight: 550;
-  border: 1px solid var(--accent);
+/* Status badge */
+.badge {
+  font-family: var(--font-sans);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.1rem 0.5rem;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  color: var(--color-muted);
+  white-space: nowrap;
 }
-
-.button:hover {
-  background: var(--accent-hover);
-  border-color: var(--accent-hover);
-  color: #fff;
-  text-decoration: none;
-}
-
-.button.secondary {
-  background: transparent;
-  color: var(--text);
-  border-color: var(--border);
-}
-
-.button.secondary:hover {
-  background: var(--bg-subtle);
-  color: var(--text);
-}
-
-.card-list {
-  list-style: none;
-  padding: 0;
-  margin: 1.5rem 0 0;
-  display: grid;
-  gap: 1rem;
-}
-
-.card {
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.25rem 1.4rem;
-  background: var(--bg-subtle);
-  transition: border-color 0.15s ease;
-}
-
-.card:hover {
-  border-color: var(--accent);
-}
-
-.card h3 {
-  margin: 0 0 0.35rem;
-  font-size: 1.1rem;
-}
-
-.card p {
-  margin: 0;
-  color: var(--text-muted);
-  font-size: 0.95rem;
+.badge[data-status="you are here"] {
+  color: var(--color-accent);
+  border-color: color-mix(in srgb, var(--color-accent) 35%, var(--color-line));
 }
 
 /* ---------------------------------------------------------------------------
-   Footer
+   Subtle page-load reveal (non-blocking — content is always in the DOM).
+   Honors reduced-motion preferences.
 --------------------------------------------------------------------------- */
-.site-footer {
-  border-top: 1px solid var(--border);
-  padding: 2rem 0;
-  color: var(--text-muted);
-  font-size: 0.9rem;
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(8px);
+    animation: reveal 0.6s cubic-bezier(0.2, 0.6, 0.2, 1) forwards;
+  }
+  .reveal-1 { animation-delay: 0.02s; }
+  .reveal-2 { animation-delay: 0.10s; }
+  .reveal-3 { animation-delay: 0.18s; }
 }
 
-.site-footer .container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: space-between;
+@keyframes reveal {
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }

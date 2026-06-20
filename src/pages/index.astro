@@ -1,28 +1,165 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Intro from "../components/Intro.astro";
+import Section from "../components/Section.astro";
+import WorkEntry from "../components/WorkEntry.astro";
+import ProjectRow from "../components/ProjectRow.astro";
+import SocialLinks from "../components/SocialLinks.astro";
+
+import { now } from "../data/now";
+import { work } from "../data/projects";
+import { building } from "../data/building";
+import { principles } from "../data/principles";
+
+// Interests for the "outside of work" section.
+const interests = [
+  "consumer psychology",
+  "dating + relationship dynamics",
+  "internet subcultures",
+  "events + community",
+  "fashion + visual culture",
+  "matcha",
+  "cars",
+  "side projects",
+  "why things become culturally relevant",
+];
 ---
 
-<BaseLayout title="Elsa — Home">
-  <h1>Hi, I'm Elsa 👋</h1>
-  <p class="lede">
-    I build things on the internet. This is my corner of the web — notes,
-    projects, and whatever I'm currently into.
-  </p>
+<BaseLayout>
+  <Intro />
 
-  <div class="button-row">
-    <a class="button" href="/projects">See my work</a>
-    <a class="button secondary" href="/about">About me</a>
-  </div>
+  <!-- CURRENTLY -->
+  <Section id="currently" title="currently" eyebrow="right now">
+    <div class="divide-y divide-line">
+      {
+        now.map((item) => (
+          <div class="row-hover flex flex-col gap-1 py-4 sm:flex-row sm:gap-6">
+            <h3 class="font-sans text-[1.02rem] font-medium text-ink sm:w-52 sm:shrink-0">
+              {item.label}
+            </h3>
+            <p class="max-w-prose text-muted">{item.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </Section>
 
-  <h2>Recent highlights</h2>
-  <ul class="card-list">
-    <li class="card">
-      <h3>Something I built</h3>
-      <p>A one-line description of a project or thing you're proud of.</p>
-    </li>
-    <li class="card">
-      <h3>Something I wrote</h3>
-      <p>A short note about a post, talk, or idea you want to surface here.</p>
-    </li>
-  </ul>
+  <!-- SELECTED WORK -->
+  <Section id="work" title="selected work" eyebrow="what i do">
+    <p class="-mt-2 mb-2 max-w-prose text-[0.92rem] text-faint italic">
+      described at a high level — no confidential details, and numbers only once
+      they're verified and public.
+    </p>
+    {work.map((entry) => <WorkEntry entry={entry} />)}
+  </Section>
+
+  <!-- THINGS I'M BUILDING -->
+  <Section id="building" title="things i'm building" eyebrow="in progress">
+    <div>
+      {
+        building.map((entry) => (
+          <ProjectRow
+            name={entry.name}
+            description={entry.description}
+            status={entry.status}
+          />
+        ))
+      }
+    </div>
+    <p class="mt-4 text-[0.92rem] text-faint italic">
+      not every one of these is a startup. some are just experiments — that's
+      the point.
+    </p>
+  </Section>
+
+  <!-- ON THE INTERNET -->
+  <Section id="internet" title="on the internet" eyebrow="distribution + testing">
+    <div class="body max-w-prose space-y-4 text-muted">
+      <p>
+        i use the internet as both a distribution channel and a testing ground.
+        i write about consumer startups, growth, personal branding, internet
+        culture, social products, and what i'm learning while becoming more
+        technical.
+      </p>
+      <p>my approach is less "thought leadership" and more:</p>
+    </div>
+    <ol class="mt-3 max-w-prose space-y-1 text-ink">
+      {
+        [
+          "notice something",
+          "have an opinion",
+          "test it",
+          "post what happened",
+          "let the internet argue about it",
+        ].map((step, i) => (
+          <li class="flex gap-3">
+            <span class="font-serif text-accent">{i + 1}</span>
+            <span>{step}</span>
+          </li>
+        ))
+      }
+    </ol>
+    <p class="mt-5 text-[0.92rem] text-faint italic">
+      audience size shown once verified: [current linkedin / follower metric]
+    </p>
+    <SocialLinks class="mt-5" />
+  </Section>
+
+  <!-- HOW I THINK -->
+  <Section id="beliefs" title="things i believe" eyebrow="how i think">
+    <div class="grid grid-cols-1 gap-x-10 gap-y-7 sm:grid-cols-2">
+      {
+        principles.map((p) => (
+          <div>
+            <h3 class="font-sans text-[1rem] font-semibold text-ink">
+              {p.title}
+            </h3>
+            <p class="mt-1 text-[0.97rem] text-muted">{p.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </Section>
+
+  <!-- OUTSIDE OF WORK -->
+  <Section id="outside" title="outside of work" eyebrow="the rest">
+    <p class="body max-w-prose text-muted">
+      outside of work, i'm usually exploring san francisco, finding a new matcha
+      spot, thinking too deeply about social dynamics, planning something,
+      posting something, or trying to turn a random observation into a product.
+    </p>
+    <ul class="mt-5 flex flex-wrap gap-2">
+      {
+        interests.map((interest) => (
+          <li class="rounded-full border border-line px-3 py-1 text-[0.85rem] text-muted">
+            {interest}
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <!-- NOTES -->
+  <Section id="notes" title="notes" eyebrow="writing">
+    <p class="body max-w-prose text-muted">
+      short notes on growth, consumer behavior, social products, and learning to
+      build are on the way. for now, the freshest thinking lives where i post.
+    </p>
+    <SocialLinks class="mt-4" />
+  </Section>
+
+  <!-- CONTACT -->
+  <Section id="contact" title="reach out" eyebrow="say hi">
+    <p class="body max-w-prose text-muted">
+      i'm always interested in meeting people building consumer products, social
+      apps, strange internet projects, and ideas that sound slightly
+      unreasonable at first.
+    </p>
+    <p class="mt-3 max-w-prose text-[0.95rem] text-faint">
+      good reasons to reach out: consumer growth · creative campaigns · social
+      products · startup collaborations · events · brand partnerships · side
+      projects · interesting people in sf.
+    </p>
+    <SocialLinks class="mt-6" />
+  </Section>
 </BaseLayout>

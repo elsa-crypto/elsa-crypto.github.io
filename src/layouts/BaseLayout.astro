@@ -1,14 +1,19 @@
 ---
 import "../styles/global.css";
-import Nav from "../components/Nav.astro";
+import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 
 interface Props {
-  title: string;
+  title?: string;
   description?: string;
 }
 
-const { title, description = "Personal website of Elsa." } = Astro.props;
+const {
+  title = "Elsa Cai — Growth, Consumer Tech & Internet Experiments",
+  description = "Elsa Cai is a growth operator and emerging technical builder working across consumer technology, social products, internet culture, content, and community.",
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
 ---
 
 <!doctype html>
@@ -19,16 +24,33 @@ const { title, description = "Personal website of Elsa." } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={description} />
+
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Social sharing (Open Graph + Twitter). Add /og.png to public/ for a preview image. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- Fonts: Instrument Serif (display) + Inter (body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <Nav />
-    <main>
-      <div class="container">
-        <slot />
-      </div>
+    <Header />
+    <main class="mx-auto max-w-[820px] px-5 pb-4 sm:px-8">
+      <slot />
+      <Footer />
     </main>
-    <Footer />
   </body>
 </html>

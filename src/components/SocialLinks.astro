@@ -1,0 +1,32 @@
+---
+import { socialLinks } from "../data/socialLinks";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+---
+
+<nav
+  class={`flex flex-wrap items-center gap-x-2 gap-y-1 ${className}`}
+  aria-label="Social and contact links"
+>
+  {
+    socialLinks.map((link) => (
+      <a
+        href={link.href}
+        rel="me noopener"
+        class="group inline-flex items-center text-[0.95rem] text-ink transition-colors hover:text-accent"
+      >
+        <span class="text-faint transition-colors group-hover:text-accent">
+          [
+        </span>
+        <span class="px-1.5">{link.label}</span>
+        <span class="text-faint transition-colors group-hover:text-accent">
+          ]
+        </span>
+      </a>
+    ))
+  }
+</nav>
