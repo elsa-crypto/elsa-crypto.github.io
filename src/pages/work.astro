@@ -1,7 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHeader from "../components/PageHeader.astro";
-import Section from "../components/Section.astro";
 import ProjectRow from "../components/ProjectRow.astro";
 
 import { building } from "../data/building";
@@ -11,27 +10,24 @@ import { building } from "../data/building";
   title="work — Elsa Cai"
   description="What Elsa Cai is building — growth, product, and marketing experiments."
 >
-  <PageHeader title="work" eyebrow="what i make">
-    growth, content, events, and product experiments.
+  <PageHeader title="work">
+    fun experiments
   </PageHeader>
 
-  <!-- THINGS I'M BUILDING -->
-  <Section id="building" title="things i'm building" eyebrow="in progress">
-    <div>
-      {
-        building.map((entry) => (
-          <ProjectRow
-            name={entry.name}
-            description={entry.description}
-            status={entry.status}
-            href={entry.href}
-          />
-        ))
-      }
-    </div>
+  <div class="mt-10 border-t border-line pt-8">
+    {
+      building.map((entry) => (
+        <ProjectRow
+          name={entry.name}
+          description={entry.description}
+          status={entry.status}
+          href={entry.href}
+        />
+      ))
+    }
     <p class="mt-4 text-[0.92rem] text-faint italic">
       not every one of these is a startup. some are just experiments — that's
       the point.
     </p>
-  </Section>
+  </div>
 </BaseLayout>
