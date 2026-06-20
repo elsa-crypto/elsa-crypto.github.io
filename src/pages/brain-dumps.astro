@@ -1,0 +1,70 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHeader from "../components/PageHeader.astro";
+import Section from "../components/Section.astro";
+import SocialLinks from "../components/SocialLinks.astro";
+
+import { principles } from "../data/principles";
+
+// Personal interests for the "outside of work" section.
+const interests = [
+  "consumer psychology",
+  "dating + relationship dynamics",
+  "internet subcultures",
+  "events + community",
+  "fashion + visual culture",
+  "matcha",
+  "cars",
+  "side projects",
+  "why things become culturally relevant",
+];
+---
+
+<BaseLayout
+  title="brain dumps — Elsa Cai"
+  description="Half-formed thoughts from Elsa Cai on growth, consumer behavior, social products, and what she believes."
+>
+  <PageHeader title="brain dumps" eyebrow="writing + thinking">
+    half-formed thoughts on growth, consumer behavior, social products, and
+    learning to build — written before they're polished. longer pieces are on
+    the way; for now the freshest thinking lives where i post.
+  </PageHeader>
+
+  <div class="mt-6">
+    <SocialLinks />
+  </div>
+
+  <!-- HOW I THINK -->
+  <Section id="beliefs" title="things i believe" eyebrow="how i think">
+    <div class="grid grid-cols-1 gap-x-10 gap-y-7 sm:grid-cols-2">
+      {
+        principles.map((p) => (
+          <div>
+            <h3 class="font-sans text-[1rem] font-semibold text-ink">
+              {p.title}
+            </h3>
+            <p class="mt-1 text-[0.97rem] text-muted">{p.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </Section>
+
+  <!-- OUTSIDE OF WORK -->
+  <Section id="outside" title="outside of work" eyebrow="the rest">
+    <p class="body max-w-prose text-muted">
+      outside of work, i'm usually exploring san francisco, finding a new matcha
+      spot, thinking too deeply about social dynamics, planning something,
+      posting something, or trying to turn a random observation into a product.
+    </p>
+    <ul class="mt-5 flex flex-wrap gap-2">
+      {
+        interests.map((interest) => (
+          <li class="rounded-full border border-line px-3 py-1 text-[0.85rem] text-muted">
+            {interest}
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+</BaseLayout>

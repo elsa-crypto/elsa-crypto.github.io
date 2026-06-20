@@ -1,0 +1,22 @@
+---
+// Top-of-page header for the sub-pages: eyebrow + h1 + optional lede (slot).
+interface Props {
+  title: string;
+  eyebrow?: string;
+}
+
+const { title, eyebrow } = Astro.props;
+const hasLede = Astro.slots.has("default");
+---
+
+<header class="pt-12 sm:pt-16">
+  {eyebrow && <p class="eyebrow mb-3">{eyebrow}</p>}
+  <h1 class="text-[2rem] sm:text-[2.4rem]">{title}</h1>
+  {
+    hasLede && (
+      <div class="body mt-3 max-w-prose text-muted">
+        <slot />
+      </div>
+    )
+  }
+</header>

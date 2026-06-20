@@ -1,11 +1,16 @@
 ---
-// Single-page nav. Each link points to a section anchor on the homepage.
+// Top nav. Each link is its own page/route.
 const links = [
-  { href: "#work", label: "work" },
-  { href: "#media", label: "media" },
-  { href: "#brain-dumps", label: "brain dumps" },
-  { href: "#contact", label: "contact" },
+  { href: "/work", label: "work" },
+  { href: "/media", label: "media" },
+  { href: "/brain-dumps", label: "brain dumps" },
+  { href: "/contact", label: "contact" },
 ];
+
+// Normalize the current path (drop trailing slash) so the active link can be
+// highlighted.
+const path = Astro.url.pathname.replace(/\/+$/, "") || "/";
+const isActive = (href: string) => path === href;
 ---
 
 <header
@@ -15,7 +20,7 @@ const links = [
     class="mx-auto flex h-14 max-w-[820px] items-center justify-between gap-4 px-5 sm:px-8"
   >
     <a
-      href="#top"
+      href="/"
       class="font-serif text-lg lowercase text-ink transition-colors hover:text-accent"
     >
       elsa
@@ -25,7 +30,11 @@ const links = [
         links.map((link) => (
           <a
             href={link.href}
-            class="whitespace-nowrap text-[0.85rem] text-muted transition-colors hover:text-accent sm:text-[0.92rem]"
+            aria-current={isActive(link.href) ? "page" : undefined}
+            class:list={[
+              "whitespace-nowrap text-[0.85rem] transition-colors hover:text-accent sm:text-[0.92rem]",
+              isActive(link.href) ? "text-ink" : "text-muted",
+            ]}
           >
             {link.label}
           </a>

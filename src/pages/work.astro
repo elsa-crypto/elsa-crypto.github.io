@@ -1,0 +1,48 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHeader from "../components/PageHeader.astro";
+import Section from "../components/Section.astro";
+import WorkEntry from "../components/WorkEntry.astro";
+import ProjectRow from "../components/ProjectRow.astro";
+
+import { work } from "../data/projects";
+import { building } from "../data/building";
+---
+
+<BaseLayout
+  title="work — Elsa Cai"
+  description="Selected work and the things Elsa Cai is building — growth, content, events, and product experiments."
+>
+  <PageHeader title="work" eyebrow="what i make">
+    growth, content, events, and product experiments — described at a high
+    level.
+  </PageHeader>
+
+  <!-- SELECTED WORK -->
+  <Section id="selected-work" title="selected work" eyebrow="what i do">
+    <p class="-mt-2 mb-2 max-w-prose text-[0.92rem] text-faint italic">
+      described at a high level — no confidential details, and numbers only once
+      they're verified and public.
+    </p>
+    {work.map((entry) => <WorkEntry entry={entry} />)}
+  </Section>
+
+  <!-- THINGS I'M BUILDING -->
+  <Section id="building" title="things i'm building" eyebrow="in progress">
+    <div>
+      {
+        building.map((entry) => (
+          <ProjectRow
+            name={entry.name}
+            description={entry.description}
+            status={entry.status}
+          />
+        ))
+      }
+    </div>
+    <p class="mt-4 text-[0.92rem] text-faint italic">
+      not every one of these is a startup. some are just experiments — that's
+      the point.
+    </p>
+  </Section>
+</BaseLayout>
