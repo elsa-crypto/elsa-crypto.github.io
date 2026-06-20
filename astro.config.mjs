@@ -3,7 +3,7 @@ import { defineConfig } from "astro/config";
 
 // https://astro.build/config
 export default defineConfig({
-  // Set this to your real domain once you have one (used for sitemaps, RSS, etc.)
-  // e.g. "https://elsa.dev"
-  site: "https://example.com",
+  // Your live URL on GitHub Pages (a user page → clean root domain).
+  // If your GitHub username isn't "elsa-crypto", update this to match.
+  site: "https://elsa-crypto.github.io",
 });
