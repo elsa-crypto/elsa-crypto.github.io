@@ -13,7 +13,7 @@ export const videos: Video[] = [
     src: "/videos/ditto-film.mp4",
     poster: "/videos/ditto-film.jpg",
     aspect: "4 / 3",
-    caption: "ditto film",
+    caption: "ucla wednesday launch",
   },
   {
     src: "/videos/ditto-film-2.mp4",
