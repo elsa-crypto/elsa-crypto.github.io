@@ -32,7 +32,7 @@ export const building: BuildEntry[] = [
     name: "marketing stunt websites",
     href: "https://ditto.ai/comp-gap",
     description:
-      "experimental website for marketing — drove a 40% MoM lift in website visits.",
+      "experimental marketing site that drove a 40% MoM lift in website visits.",
     status: "ongoing",
   },
   {
