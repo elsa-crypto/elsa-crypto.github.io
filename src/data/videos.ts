@@ -28,6 +28,12 @@ export const videos: Video[] = [
     caption: "ditto summer launch",
   },
   {
+    src: "/videos/raise-announcement.mp4",
+    poster: "/videos/raise-announcement.jpg",
+    aspect: "4 / 3",
+    caption: "raise announcement",
+  },
+  {
     src: "/videos/phs-nhs-music-video.mp4",
     poster: "/videos/phs-nhs-music-video.jpg",
     aspect: "16 / 9",
