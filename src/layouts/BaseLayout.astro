@@ -9,11 +9,12 @@ interface Props {
 }
 
 const {
-  title = "Elsa Cai — Growth, Consumer Tech & Internet Experiments",
-  description = "Elsa Cai is a growth operator and emerging technical builder working across consumer technology, social products, internet culture, content, and community.",
+  title = "elsa cai",
+  description = "elsa cai",
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL("/og.png", Astro.site).href;
 ---
 
 <!doctype html>
@@ -22,21 +23,24 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
 
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
 
-    <!-- Social sharing (Open Graph + Twitter). Add /og.png to public/ for a preview image. -->
+    <!-- Social sharing (Open Graph + Twitter) -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
 
     <!-- Fonts: Instrument Serif (display) + Inter (body) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
