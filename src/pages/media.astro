@@ -1,41 +1,33 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHeader from "../components/PageHeader.astro";
-import InstagramEmbeds from "../components/InstagramEmbeds.astro";
+import VideoPlayer from "../components/VideoPlayer.astro";
+
+import { videos } from "../data/videos";
 ---
 
 <BaseLayout
   title="media — Elsa Cai"
-  description="Elsa Cai's creative work — turning ideas into things people can feel."
+  description="Elsa Cai's creative work: turning ideas into things people can feel."
 >
   <PageHeader title="media">
     <p>i turn ideas into things people can feel.</p>
     <p class="mt-2">
-      i make videos for fun. director and producer or anything in between — just
+      i make videos for fun. director and producer or anything in between. just
       not an editor.
     </p>
   </PageHeader>
 
-  <!-- INSTAGRAM REELS -->
-  <div class="mt-10">
-    <InstagramEmbeds />
+  <div class="mt-10 space-y-10">
+    {
+      videos.map((v) => (
+        <VideoPlayer
+          src={v.src}
+          poster={v.poster}
+          aspect={v.aspect}
+          caption={v.caption}
+        />
+      ))
+    }
   </div>
-
-  <!-- HS PROJECT VIDEO (bottom of page) -->
-  <figure class="m-0 mt-12">
-    <div class="overflow-hidden rounded-xl border border-line bg-black">
-      <video
-        class="block aspect-video w-full"
-        controls
-        preload="none"
-        playsinline
-        poster="/videos/phs-nhs-music-video.jpg"
-      >
-        <source src="/videos/phs-nhs-music-video.mp4" type="video/mp4" />
-        <a href="/videos/phs-nhs-music-video.mp4">download the video</a>
-        (your browser can't play it inline).
-      </video>
-    </div>
-    <figcaption class="eyebrow mt-2">hs project</figcaption>
-  </figure>
 </BaseLayout>

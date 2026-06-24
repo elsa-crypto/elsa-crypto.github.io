@@ -1,0 +1,31 @@
+---
+// Self-hosted native video player. Plays directly on the page (no third-party
+// embed). preload="none" + poster so the file only loads when played.
+interface Props {
+  src: string;
+  poster: string;
+  aspect?: string; // CSS aspect-ratio, e.g. "16 / 9" or "4 / 3"
+  caption?: string;
+}
+
+const { src, poster, aspect = "16 / 9", caption } = Astro.props;
+---
+
+<figure class="m-0">
+  <div
+    class="overflow-hidden rounded-xl border border-line bg-black"
+    style={`aspect-ratio: ${aspect};`}
+  >
+    <video
+      class="h-full w-full object-cover"
+      controls
+      preload="none"
+      playsinline
+      poster={poster}
+    >
+      <source src={src} type="video/mp4" />
+      <a href={src}>download the video</a> (your browser can't play it inline).
+    </video>
+  </div>
+  {caption && <figcaption class="eyebrow mt-2">{caption}</figcaption>}
+</figure>
