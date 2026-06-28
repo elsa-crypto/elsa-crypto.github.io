@@ -1,0 +1,83 @@
+---
+// A little "click me" guy. Click it and a swarm of nailong bursts across the
+// screen. Pure fun, no dependencies.
+---
+
+<div class="mt-16 mb-2 flex select-none flex-col items-center gap-1">
+  <span class="font-serif text-[1.15rem] text-muted" style="transform: rotate(-5deg)">
+    click me
+  </span>
+  <svg
+    width="32"
+    height="38"
+    viewBox="0 0 32 38"
+    fill="none"
+    aria-hidden="true"
+    class="text-muted"
+  >
+    <path
+      d="M19 4 C26 14 7 17 13 28"
+      stroke="currentColor"
+      stroke-width="2.4"
+      stroke-linecap="round"
+    />
+    <path
+      d="M7 23 L13 30 L20 25"
+      stroke="currentColor"
+      stroke-width="2.4"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+  <button
+    id="nailong-trigger"
+    type="button"
+    aria-label="surprise me"
+    class="transition-transform duration-150 hover:scale-110 active:scale-90"
+  >
+    <img src="/nailong.svg" width="60" height="60" alt="" draggable="false" />
+  </button>
+</div>
+
+<script>
+  const trigger = document.getElementById("nailong-trigger");
+  trigger?.addEventListener("click", () => {
+    const r = trigger.getBoundingClientRect();
+    const ox = r.left + r.width / 2;
+    const oy = r.top + r.height / 2;
+    const N = 44;
+    for (let i = 0; i < N; i++) {
+      const img = document.createElement("img");
+      img.src = "/nailong.svg";
+      img.alt = "";
+      const size = 38 + Math.random() * 46;
+      img.style.cssText = `position:fixed;left:${ox}px;top:${oy}px;width:${size}px;height:${size}px;margin:${-size / 2}px 0 0 ${-size / 2}px;pointer-events:none;z-index:9999;will-change:transform,opacity;`;
+      document.body.appendChild(img);
+
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 120 + Math.random() * 440;
+      const dx = Math.cos(angle) * dist;
+      const upY = -(140 + Math.random() * 280);
+      const fallY = window.innerHeight + 240;
+      const rot = (Math.random() - 0.5) * 900;
+      const dur = 1500 + Math.random() * 1400;
+
+      const anim = img.animate(
+        [
+          { transform: "translate(0,0) scale(.3) rotate(0deg)", opacity: 0 },
+          {
+            transform: `translate(${dx * 0.5}px,${upY}px) scale(1) rotate(${rot * 0.4}deg)`,
+            opacity: 1,
+            offset: 0.25,
+          },
+          {
+            transform: `translate(${dx}px,${fallY}px) scale(1) rotate(${rot}deg)`,
+            opacity: 0,
+          },
+        ],
+        { duration: dur, easing: "cubic-bezier(.18,.7,.35,1)" },
+      );
+      anim.onfinish = () => img.remove();
+    }
+  });
+</script>

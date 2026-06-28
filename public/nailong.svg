@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <!-- little arms -->
+  <ellipse cx="16" cy="84" rx="13" ry="10" fill="#F6BE2C" />
+  <ellipse cx="104" cy="84" rx="13" ry="10" fill="#F6BE2C" />
+  <!-- feet -->
+  <ellipse cx="42" cy="112" rx="12" ry="7" fill="#F6BE2C" />
+  <ellipse cx="78" cy="112" rx="12" ry="7" fill="#F6BE2C" />
+  <!-- body -->
+  <path
+    d="M60 14 C92 14 104 40 104 66 C104 96 86 110 60 110 C34 110 16 96 16 66 C16 40 28 14 60 14 Z"
+    fill="#FFD23F"
+    stroke="#E0A41E"
+    stroke-width="2.5"
+  />
+  <!-- eyes -->
+  <circle cx="45" cy="58" r="15" fill="#ffffff" stroke="#5a4a1e" stroke-width="2" />
+  <circle cx="79" cy="58" r="15" fill="#ffffff" stroke="#5a4a1e" stroke-width="2" />
+  <circle cx="46" cy="60" r="8.5" fill="#5FB552" />
+  <circle cx="78" cy="60" r="8.5" fill="#5FB552" />
+  <circle cx="46" cy="60" r="4.2" fill="#15140f" />
+  <circle cx="78" cy="60" r="4.2" fill="#15140f" />
+  <circle cx="43.5" cy="57" r="1.8" fill="#ffffff" />
+  <circle cx="75.5" cy="57" r="1.8" fill="#ffffff" />
+  <!-- surprised mouth -->
+  <ellipse cx="62" cy="86" rx="8" ry="11" fill="#8a3b2c" />
+</svg>
