@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import Header from "../components/Header.astro";
+import CursorTrail from "../components/CursorTrail.astro";
 
 interface Props {
   title?: string;
@@ -54,5 +55,6 @@ const ogImage = new URL("/og.png", Astro.site).href;
     <main class="mx-auto max-w-[820px] px-5 pb-16 sm:px-8">
       <slot />
     </main>
+    <CursorTrail />
   </body>
 </html>
