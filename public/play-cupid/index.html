@@ -1038,8 +1038,20 @@ body {
     width: 18px;
     height: 18px;
   }
+  /* On phones the CTA sits inside the artwork, just under "get paid"
+     (the headline ends at ~51% of the hero, the pink underline just below).
+     .frame is the containing block, and the hero's fixed aspect ratio makes
+     the percentage stable across screen widths. */
+  .frame {
+    position: relative;
+  }
   .cta-strip {
-    padding-top: 20px;
+    position: absolute;
+    top: 56%;
+    left: 0;
+    right: 0;
+    z-index: 25;
+    padding: 0 20px;
   }
 }
 
@@ -2223,6 +2235,7 @@ body {
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
+
 (function () {
   "use strict";
   var backdrop = document.getElementById("backdrop");
@@ -2301,7 +2314,13 @@ body {
     err("school", school ? "" : "Please enter your school."); if (!school) ok = false;
     if (!ok) return;
 
-    var link = "https://ditto.ai/?utm_source=cupid&utm_medium=referral&utm_campaign=play-cupid&ref=" + slug(name) + "-" + token(6);
+    var code = slug(name) + "-" + token(6);
+    // Mirror the real flow: hand off to the "your link is ready" page.
+    if (window.__READY_PAGE) {
+      window.location.href = window.__READY_PAGE + "?code=" + encodeURIComponent(code);
+      return;
+    }
+    var link = "https://ditto.ai/?utm_source=cupid&utm_medium=referral&utm_campaign=play-cupid&ref=" + code;
     linkInput.value = link;
     document.getElementById("confirmedEmail").textContent = email;
     document.getElementById("smsBtn").href = "sms:&body=" + encodeURIComponent(SHARE_TEXT + " " + link);
