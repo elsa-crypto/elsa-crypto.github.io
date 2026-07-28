@@ -2014,6 +2014,142 @@ body {
   }
 }
 
+/* ============================================================
+   /link-ready — the page you land on right after claiming a link
+   ============================================================ */
+.ready {
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: clamp(32px, 6vw, 72px) clamp(20px, 4vw, 40px);
+}
+.ready-inner {
+  position: relative;
+  z-index: 2;
+  width: min(620px, 100%);
+  background: #fff;
+  border: 3px solid var(--ink);
+  border-radius: 26px;
+  box-shadow: 9px 9px 0 var(--ink);
+  padding: clamp(26px, 4.5vw, 44px);
+  text-align: center;
+}
+.ready-badge {
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 3px solid var(--ink);
+  color: #fff;
+  font-size: 30px;
+  font-weight: 900;
+  animation: pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.ready h1 {
+  margin-top: 6px;
+  font-size: clamp(28px, 5vw, 44px);
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+.ready h1 em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 900;
+}
+.ready-lead {
+  margin: 14px auto 0;
+  max-width: 44ch;
+  font-size: clamp(15px, 1.9vw, 17px);
+  font-weight: 500;
+  color: #4a463f;
+  line-height: 1.55;
+}
+.ready-linkbox {
+  margin-top: 24px;
+}
+.ready-linkbox input {
+  text-align: center;
+  font-weight: 700;
+}
+.ready-share {
+  grid-template-columns: repeat(4, 1fr);
+}
+.ready-code {
+  margin-top: 18px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6a655c;
+}
+
+/* The direct route into the dashboard — the loudest thing after the link. */
+.ready-dash {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  margin-top: 26px;
+  padding: 17px 28px;
+  background: var(--ink);
+  color: #fff;
+  border: 3px solid var(--ink);
+  border-radius: 999px;
+  font-size: clamp(16px, 1.9vw, 18px);
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 6px 6px 0 var(--accent);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.ready-dash:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0 var(--accent);
+}
+.ready-dash:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--accent);
+  transition-duration: 0.05s;
+}
+.ready-dash:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+.ready-note {
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #8a8478;
+}
+.ready-back {
+  display: inline-block;
+  margin-top: 22px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #6a655c;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.ready-back:hover {
+  color: var(--ink);
+}
+
+@media (max-width: 560px) {
+  .ready-share {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ready-badge {
+    animation: none;
+  }
+}
+
 /* Artifact-only: inline the art, and hide app-only affordances. */
 .stage-hero{background-image:url("hero.jpg")!important;}
 @media (max-width:680px){.stage-hero{background-image:url("hero-mobile.jpg")!important;}}
