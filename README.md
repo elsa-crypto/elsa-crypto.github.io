@@ -1,4 +1,4 @@
-# Personal Website
+# Personal Website ( WHY IS TS PUBLIC)
 
 Elsa Cai's personal website — a single-page editorial index built with
 [Astro](https://astro.build) and [Tailwind CSS](https://tailwindcss.com).
