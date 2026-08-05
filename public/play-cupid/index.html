@@ -61,37 +61,6 @@ body {
   overflow-x: hidden;
 }
 
-/* ---- Vibe toggle ---- */
-.vibe-toggle {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 70;
-  display: flex;
-  gap: 4px;
-  padding: 5px;
-  background: var(--ink);
-  border: 3px solid #fff;
-  border-radius: 999px;
-  box-shadow: 0 14px 30px -10px rgba(0, 0, 0, 0.6);
-}
-.vibe-toggle button {
-  border: none;
-  background: transparent;
-  color: #fff;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 14px;
-  padding: 9px 20px;
-  border-radius: 999px;
-  cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
-}
-.vibe-toggle button.on {
-  background: var(--accent);
-}
-
 /* ---- Outer cream frame around everything ---- */
 .frame {
   padding: clamp(8px, 1.4vw, 18px);
@@ -414,10 +383,220 @@ body {
   z-index: 2;
   overflow: visible;
 }
+/* The CTA rides on top of the collage at every size: the headline is baked
+   into the artwork and ends mid-frame, so the button lands in the open space
+   just below it. .frame (hero + this strip, nothing else) is the containing
+   block, and the hero's fixed aspect ratio keeps the percentage stable. */
+.frame {
+  position: relative;
+}
 .cta-strip {
+  position: absolute;
+  top: 66%;
+  left: 0;
+  right: 0;
+  z-index: 25;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(10px, 1vw, 14px);
+  padding: 0 20px;
+}
+/* Brand chip under the CTA: a paper sticker on the collage, so the Ditto mark
+   is on the first screen without competing with the headline. */
+.cta-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--paper);
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  padding: 6px 14px;
+  text-decoration: none;
+  box-shadow: 3px 3px 0 var(--ink);
+  transform: rotate(-1.5deg);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.cta-brand span {
+  font-family: var(--font-hand);
+  font-size: clamp(15px, 1.2vw, 18px);
+  line-height: 1;
+  color: #6a655c;
+}
+.cta-brand img {
+  display: block;
+  width: auto;
+  height: clamp(12px, 1.05vw, 15px);
+}
+.cta-brand:hover {
+  transform: rotate(-1.5deg) translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--ink);
+}
+.cta-brand:active {
+  transform: rotate(-1.5deg) translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--ink);
+  transition-duration: 0.05s;
+}
+
+/* ============================================================
+   Persistent CTA — the hero button scrolls away with the artwork, so this
+   takes over for the rest of the page. Hidden until the hero leaves view,
+   otherwise it competes with the button it duplicates.
+   ============================================================ */
+.sticky-cta {
+  position: fixed;
+  z-index: 60;
+  right: clamp(14px, 2.4vw, 26px);
+  bottom: clamp(14px, 2.4vw, 26px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(16px) scale(0.97);
+  pointer-events: none;
+  transition: opacity 0.24s ease, transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.sticky-cta.show {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+/* A drawer already owns the screen — the floating CTA would sit on top of it. */
+body.panel-open .sticky-cta {
+  opacity: 0;
+  transform: translateY(16px) scale(0.97);
+  pointer-events: none;
+}
+.sticky-cta .banner-cta {
+  padding: 14px 26px;
+  font-size: 16px;
+  box-shadow: 5px 5px 0 var(--ink);
+}
+.sticky-cta .banner-cta:hover {
+  box-shadow: 7px 7px 0 var(--ink);
+}
+.ghost-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #fff;
+  color: var(--ink);
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  padding: 12px 18px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 var(--ink);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.ghost-pill:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.ghost-pill:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--ink);
+  transition-duration: 0.05s;
+}
+@media (max-width: 680px) {
+  /* A bar rather than a floating pill — thumbs live at the bottom edge. */
+  .sticky-cta {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    gap: 8px;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    background: rgba(243, 234, 217, 0.94);
+    border-top: 2.5px solid var(--ink);
+    backdrop-filter: blur(8px);
+    transform: translateY(100%);
+  }
+  .sticky-cta.show {
+    transform: none;
+  }
+  body.panel-open .sticky-cta {
+    transform: translateY(100%);
+  }
+  .sticky-cta .banner-cta {
+    flex: 1;
+    justify-content: center;
+    padding: 14px 18px;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .sticky-cta .ghost-pill {
+    padding: 13px 15px;
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  /* Icon-only in the bar — it has to leave room for the primary action.
+     The pill inside a CTA band keeps its words. */
+  .sticky-cta .ghost-pill .label {
+    display: none;
+  }
+}
+
+/* ============================================================
+   Mid-page CTA bands — a fresh chance to claim a link without scrolling
+   back to the hero. One after the three steps, one before the footer.
+   ============================================================ */
+.cta-band {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: clamp(10px, 2vw, 20px) clamp(20px, 4vw, 40px) clamp(50px, 7vw, 90px);
+}
+.cta-band-inner {
+  background: #fff;
+  border: 3px solid var(--ink);
+  border-radius: 26px;
+  box-shadow: 9px 9px 0 var(--ink);
+  padding: clamp(26px, 4vw, 44px) clamp(22px, 4vw, 48px);
+  text-align: center;
+  transform: rotate(-0.6deg);
+}
+.cta-band-end .cta-band-inner {
+  background: #fff4dc;
+  transform: rotate(0.5deg);
+}
+.band-kicker {
+  font-family: var(--font-hand);
+  font-size: clamp(22px, 3vw, 34px);
+  color: var(--purple);
+  display: inline-block;
+  transform: rotate(-2deg);
+}
+.cta-band h2 {
+  font-weight: 900;
+  font-size: clamp(26px, 3.8vw, 42px);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  margin-top: 4px;
+}
+.cta-band h2 em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 900;
+}
+.cta-band p {
+  margin: 12px auto 0;
+  max-width: 56ch;
+  font-size: clamp(15px, 1.5vw, 17px);
+  font-weight: 500;
+  color: #5c574e;
+}
+.band-actions {
+  margin-top: clamp(18px, 2.4vw, 26px);
   display: flex;
   justify-content: center;
-  padding: clamp(22px, 3.5vw, 40px) 20px 0;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.band-note {
+  margin-top: 14px;
+  font-family: var(--font-hand);
+  font-size: 19px;
+  color: #6a655c;
 }
 .banner-cta {
   display: inline-flex;
@@ -427,10 +606,10 @@ body {
   color: #fff;
   border: 3px solid var(--ink);
   border-radius: 999px;
-  padding: 16px 38px;
+  padding: clamp(16px, 1.5vw, 22px) clamp(38px, 4vw, 58px);
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: clamp(16px, 1.8vw, 20px);
+  font-size: clamp(16px, 1.9vw, 24px);
   cursor: pointer;
   box-shadow: 6px 6px 0 var(--ink);
   transition: transform 0.12s ease, box-shadow 0.12s ease;
@@ -716,6 +895,60 @@ body {
   color: var(--accent);
   margin-top: 6px;
 }
+
+/* ---- Custom link ending: the code is the part people actually read out
+   loud, so it's worth letting them choose it. ---- */
+.vanity-row {
+  display: flex;
+  align-items: stretch;
+  background: #fff;
+  border: 2.5px solid var(--ink);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: box-shadow 0.15s ease;
+}
+.vanity-row:focus-within {
+  box-shadow: 4px 4px 0 var(--accent);
+}
+.vanity-row.invalid {
+  border-color: var(--accent);
+}
+.vanity-row .prefix {
+  display: flex;
+  align-items: center;
+  padding: 0 4px 0 13px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #9a948a;
+  white-space: nowrap;
+  user-select: none;
+}
+/* Sits inside the row's own border, so it drops its box entirely. */
+#referralForm .vanity-row input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  border-radius: 0;
+  padding-left: 0;
+}
+#referralForm .vanity-row input:focus {
+  box-shadow: none;
+}
+.field-hint {
+  display: block;
+  margin-top: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #6a655c;
+}
+.field-hint b {
+  font-weight: 800;
+  color: var(--ink);
+}
+.field-optional {
+  font-weight: 600;
+  color: #9a948a;
+}
 .primary-button.full-width {
   margin-top: 20px;
   width: 100%;
@@ -809,6 +1042,72 @@ body {
   background: var(--accent);
   color: #fff;
 }
+
+/* ---- Share kit: pick a tone, tweak the words, then send. The message is
+   what gets copied and handed to iMessage / the native share sheet. ---- */
+.share-kit {
+  margin-top: 18px;
+  text-align: left;
+}
+.share-kit-label {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6a655c;
+}
+.tmpl-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 9px 0 10px;
+}
+.tmpl-chip {
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 7px 13px;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.12s ease;
+}
+.tmpl-chip:hover {
+  transform: translateY(-1px);
+}
+.tmpl-chip.active {
+  background: var(--accent);
+  color: #fff;
+}
+.share-message {
+  width: 100%;
+  min-height: 88px;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--ink);
+  background: #fff;
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  padding: 12px 14px;
+  transition: box-shadow 0.15s ease;
+}
+.share-message:focus {
+  outline: none;
+  box-shadow: 4px 4px 0 var(--accent);
+}
+.share-kit-note {
+  display: block;
+  margin-top: 7px;
+  font-family: var(--font-hand);
+  font-size: 17px;
+  color: #6a655c;
+}
 .email-link-button {
   display: block;
   text-align: center;
@@ -867,6 +1166,49 @@ body {
 }
 .tab-button.active {
   background: var(--accent);
+  color: #fff;
+}
+
+/* ---- Campus filter: rankings mean more when they're your own campus ---- */
+.board-scope {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+.board-scope select {
+  flex: 1;
+  min-width: 0;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink);
+  background: #fff;
+  border: 2.5px solid var(--ink);
+  border-radius: 12px;
+  padding: 11px 12px;
+  cursor: pointer;
+}
+.board-scope select:focus {
+  outline: none;
+  box-shadow: 4px 4px 0 var(--accent);
+}
+.scope-mine {
+  flex-shrink: 0;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--ink);
+  background: var(--paper-deep);
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  padding: 11px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.scope-mine.active {
+  background: var(--ink);
   color: #fff;
 }
 .top-three {
@@ -1038,20 +1380,10 @@ body {
     width: 18px;
     height: 18px;
   }
-  /* On phones the CTA sits inside the artwork, just under "get paid"
-     (the headline ends at ~51% of the hero, the pink underline just below).
-     .frame is the containing block, and the hero's fixed aspect ratio makes
-     the percentage stable across screen widths. */
-  .frame {
-    position: relative;
-  }
+  /* The portrait artwork's headline ends higher up than the landscape one,
+     so the CTA moves with it. */
   .cta-strip {
-    position: absolute;
     top: 56%;
-    left: 0;
-    right: 0;
-    z-index: 25;
-    padding: 0 20px;
   }
 }
 
@@ -1326,7 +1658,9 @@ body {
 /* ---- Share row in the referral success state ---- */
 .share-row {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* Auto-fit keeps the row even whether there are three buttons or four —
+     the ready page and the drawer no longer have the same count. */
+  grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
   gap: 8px;
   margin-top: 14px;
 }
@@ -1552,6 +1886,13 @@ body {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+}
+.footer-wordmark-link {
+  display: inline-block;
+  transition: transform 0.12s ease;
+}
+.footer-wordmark-link:hover {
+  transform: translateY(-2px) rotate(-1.5deg);
 }
 .footer-wordmark {
   display: block;
@@ -1831,9 +2172,17 @@ body {
 }
 
 /* Thin the scatter on small screens so it stays atmosphere, not clutter. */
-@media (max-width: 760px) {
+/* Below ~900px the section headings grow to nearly the full container width,
+   and the edge stickers start landing on top of the text. The atmosphere is
+   the thing that gives way, not the words. */
+@media (max-width: 900px) {
   .deco-desktop {
     display: none;
+  }
+}
+@media (max-width: 980px) {
+  .how-head h2 {
+    font-size: clamp(28px, 4.6vw, 44px);
   }
 }
 
@@ -1893,6 +2242,10 @@ body {
 /* Replace the default iOS grey flash with our own press states below. */
 .pill,
 .banner-cta,
+.cta-brand,
+.ghost-pill,
+.tmpl-chip,
+.scope-mine,
 .share-btn,
 .primary-button,
 .close-button,
@@ -1951,6 +2304,11 @@ body {
 /* ---- Keyboard focus: visible on every control, never on mouse click ---- */
 .pill:focus-visible,
 .banner-cta:focus-visible,
+.cta-brand:focus-visible,
+.footer-wordmark-link:focus-visible,
+.ghost-pill:focus-visible,
+.tmpl-chip:focus-visible,
+.scope-mine:focus-visible,
 .share-btn:focus-visible,
 .primary-button:focus-visible,
 .close-button:focus-visible,
@@ -2162,6 +2520,14 @@ body {
   }
 }
 
+/* The fixed CTA bar on phones would otherwise cover the footer's last line.
+   Lives here, after .site-footer's own padding, so it actually wins. */
+@media (max-width: 680px) {
+  .site-footer {
+    padding-bottom: calc(100px + env(safe-area-inset-bottom));
+  }
+}
+
 /* Artifact-only: inline the art, and hide app-only affordances. */
 .stage-hero{background-image:url("hero.jpg")!important;}
 @media (max-width:680px){.stage-hero{background-image:url("hero-mobile.jpg")!important;}}
@@ -2174,15 +2540,23 @@ body {
       <h1 class="sr-only">Play Cupid and Get Paid</h1>
       <nav class="top-nav"><button class="pill" data-panel="leaderboard"><span class="thumb"><svg class="" viewBox="0 0 60 60" aria-hidden="true"><path d="M30 2c3 16 12 25 28 28-16 3-25 12-28 28-3-16-12-25-28-28C18 27 27 18 30 2Z" fill="#ffd23f" stroke="#111" stroke-width="3" stroke-linejoin="round"></path></svg></span><span class="label">Leaderboard</span></button><button class="pill" data-panel="referral"><span class="thumb"><svg class="" viewBox="0 0 100 92" aria-hidden="true"><path d="M50 88C20 66 4 50 4 30 4 14 16 4 30 4c9 0 16 4 20 12 4-8 11-12 20-12 14 0 26 10 26 26 0 20-16 36-46 58Z" fill="#ff2e63" stroke="#fff" stroke-width="6" stroke-linejoin="round"></path></svg></span><span class="label">Get your link</span></button></nav>
     </section>
-    <div class="cta-strip">
+    <div class="cta-strip" id="heroCta">
       <button class="banner-cta" data-panel="referral">Claim your link <span aria-hidden="true">💘</span></button>
+      <a class="cta-brand" href="https://ditto.ai" target="_blank" rel="noreferrer noopener" aria-label="Ditto — visit ditto.ai"><span aria-hidden="true">powered by</span><img src="ditto-wordmark.png" alt="Ditto" width="900" height="305"/></a>
     </div>
   </div>
 
   <section class="how"><span aria-hidden="true" class="deco deco-float deco-desktop" style="top:9%;left:6%;width:120px;--rot:-14deg"><svg class="" viewBox="0 0 160 80" aria-hidden="true"><g stroke="#111" stroke-width="7" stroke-linecap="round" fill="none"><line x1="18" y1="62" x2="138" y2="18"></line><path d="M138 18l-20 2M138 18l-6 19"></path><path d="M18 62l16-3M18 62l3-16"></path></g><path d="M126 6c-6 0-10 3-12 8-2-5-7-8-12-8-8 0-14 6-14 14 0 10 9 18 26 30 17-12 26-20 26-30 0-8-6-14-14-14Z" fill="#ff2e63" stroke="#fff" stroke-width="4" stroke-linejoin="round"></path></svg></span><span aria-hidden="true" class="deco deco-float deco-desktop" style="top:16%;right:7%;width:78px;--rot:10deg"><svg class="" viewBox="0 0 120 88" aria-hidden="true"><rect x="6" y="12" width="108" height="72" rx="8" fill="#fff5e9" stroke="#111" stroke-width="4"></rect><path d="M8 16l52 40 52-40" fill="none" stroke="#111" stroke-width="4" stroke-linejoin="round"></path><path d="M60 40C52 34 47 30 47 25c0-4 3-7 7-7 3 0 5 1 6 4 1-3 3-4 6-4 4 0 7 3 7 7 0 5-5 9-13 15Z" fill="#ff2e63"></path></svg></span><span aria-hidden="true" class="deco deco-desktop" style="bottom:12%;left:3%;width:132px;--rot:0deg"><svg class="" viewBox="0 0 160 80" aria-hidden="true"><path d="M10 40q7-9 14 0q7-9 14 0" fill="none" stroke="#141414" stroke-width="3.5" stroke-linecap="round"></path><path d="M40 22q7-9 14 0q7-9 14 0" fill="none" stroke="#141414" stroke-width="3.5" stroke-linecap="round"></path><path d="M70 34q7-9 14 0q7-9 14 0" fill="none" stroke="#141414" stroke-width="3.5" stroke-linecap="round"></path><path d="M98 16q7-9 14 0q7-9 14 0" fill="none" stroke="#141414" stroke-width="3.5" stroke-linecap="round"></path><path d="M128 30q7-9 14 0q7-9 14 0" fill="none" stroke="#141414" stroke-width="3.5" stroke-linecap="round"></path><path d="M55 52q7-9 14 0q7-9 14 0" fill="none" stroke="#141414" stroke-width="3.5" stroke-linecap="round"></path><path d="M86 58q7-9 14 0q7-9 14 0" fill="none" stroke="#141414" stroke-width="3.5" stroke-linecap="round"></path></svg></span><span aria-hidden="true" class="deco deco-float" style="top:4%;right:34%;width:40px;--rot:-8deg"><svg class="" viewBox="0 0 60 60" aria-hidden="true"><path d="M30 2c3 16 12 25 28 28-16 3-25 12-28 28-3-16-12-25-28-28C18 27 27 18 30 2Z" fill="#ffd23f" stroke="#111" stroke-width="3" stroke-linejoin="round"></path></svg></span><span aria-hidden="true" class="deco deco-float deco-desktop" style="bottom:8%;right:5%;width:100px;--rot:6deg"><svg class="" viewBox="0 0 120 90" aria-hidden="true" fill="none" stroke="#8a2be2" stroke-width="3"><path d="M18 44c-9-7-14-11-14-19 0-6 5-10 11-10 4 0 7 2 9 6 2-4 5-6 9-6 6 0 11 4 11 10 0 8-9 13-18 21" stroke-linejoin="round"></path><path d="M70 30c-6-5-10-8-10-13 0-4 3-7 8-7 3 0 5 1 7 4 2-3 4-4 7-4 4 0 7 3 7 7 0 5-6 9-12 15" stroke-linejoin="round"></path><path d="M100 62c-4-3-7-5-7-9 0-3 2-5 5-5 2 0 4 1 5 3 1-2 3-3 5-3 3 0 5 2 5 5 0 4-4 6-8 10" stroke-linejoin="round"></path></svg></span><div class="reveal"><div class="how-head"><span class="how-eyebrow">here&#x27;s the deal</span><h2>Three steps.<!-- --> <em class="scribbled">Zero<svg class="scribble-line" viewBox="0 0 480 60" aria-hidden="true" preserveAspectRatio="none"><path d="M8 34C120 8 340 8 452 26c14 3 20 10 8 16-120 18-300 14-372 2" fill="none" stroke="#ff5fa2" stroke-width="7" stroke-linecap="round"></path></svg></em> <!-- -->awkwardness.</h2></div></div><div class="steps"><div class="reveal"><article class="step"><span class="badge"><svg class="" viewBox="0 0 100 92" aria-hidden="true"><path d="M50 88C20 66 4 50 4 30 4 14 16 4 30 4c9 0 16 4 20 12 4-8 11-12 20-12 14 0 26 10 26 26 0 20-16 36-46 58Z" fill="#ff2e63" stroke="#fff" stroke-width="6" stroke-linejoin="round"></path></svg></span><span class="num">01</span><h3>Claim your link</h3><p>Drop your name, email, and school to mint a unique referral link.</p></article></div><div class="reveal" style="transition-delay:110ms"><article class="step"><span class="badge"><svg class="" viewBox="0 0 110 96" aria-hidden="true"><path d="M20 8h70a16 16 0 0 1 16 16v34a16 16 0 0 1-16 16H44l-22 18 4-18h-6A16 16 0 0 1 4 58V24A16 16 0 0 1 20 8Z" fill="#2f9bff" stroke="#fff" stroke-width="6" stroke-linejoin="round"></path><path d="M55 56C42 47 35 41 35 33c0-6 5-10 10-10 4 0 8 2 10 6 2-4 6-6 10-6 5 0 10 4 10 10 0 8-7 14-20 23Z" fill="#fff"></path></svg></span><span class="num">02</span><h3>Share the love</h3><p>Send it to friends, group chats, and every corner of campus.</p></article></div><div class="reveal" style="transition-delay:220ms"><article class="step"><span class="badge"><svg class="" viewBox="0 0 120 84" aria-hidden="true"><g stroke="#0f3d1e" stroke-width="3"><rect x="6" y="30" width="108" height="48" rx="6" fill="#7bc47f"></rect><rect x="10" y="18" width="108" height="48" rx="6" fill="#8fd694" transform="rotate(-6 64 42)"></rect></g><circle cx="64" cy="42" r="15" fill="none" stroke="#0f3d1e" stroke-width="3" transform="rotate(-6 64 42)"></circle><text x="64" y="49" font-size="20" font-weight="800" fill="#0f3d1e" text-anchor="middle" transform="rotate(-6 64 42)">$</text></svg></span><span class="num">03</span><h3>Climb + cash in</h3><p>Track confirmed sign-ups, rise up the board, and unlock rewards.</p></article></div></div></section>
+  <div class="reveal"><section class="cta-band cta-band-mid"><div class="cta-band-inner"><span class="band-kicker">ready when you are</span><h2>Claim your link in <em>ten seconds</em>.</h2><p>Name, email, school — then it’s yours to share. You get paid for every friend who joins, with no cap on how many.</p><div class="band-actions"><button class="banner-cta" data-panel="referral">Claim your link <span aria-hidden="true">💘</span></button><button class="ghost-pill" data-panel="leaderboard"><span aria-hidden="true">🏆</span> <span class="label">See the leaderboard</span></button></div><p class="band-note">no app to download, nothing to install</p></div></section></div>
   <section class="explainer" aria-labelledby="what-is-ditto"><span aria-hidden="true" class="deco deco-float" style="top:12%;left:6%;width:58px;--rot:-10deg"><svg class="" viewBox="0 0 60 60" aria-hidden="true"><path d="M30 2c3 16 12 25 28 28-16 3-25 12-28 28-3-16-12-25-28-28C18 27 27 18 30 2Z" fill="#ffd23f" stroke="#111" stroke-width="3" stroke-linejoin="round"></path></svg></span><span aria-hidden="true" class="deco deco-float deco-desktop" style="top:22%;right:8%;width:128px;--rot:6deg"><svg class="" viewBox="0 0 120 120" aria-hidden="true"><g stroke="#ff5fa2" stroke-width="3" stroke-linecap="round"><line x1="82" y1="60" x2="112" y2="60"></line><line x1="79.05" y1="71" x2="105.03" y2="86"></line><line x1="71" y1="79.05" x2="86" y2="105.03"></line><line x1="60" y1="82" x2="60" y2="112"></line><line x1="49" y1="79.05" x2="34" y2="105.03"></line><line x1="40.95" y1="71" x2="14.97" y2="86"></line><line x1="38" y1="60" x2="8" y2="60"></line><line x1="40.95" y1="49" x2="14.97" y2="34"></line><line x1="49" y1="40.95" x2="34" y2="14.97"></line><line x1="60" y1="38" x2="60" y2="8"></line><line x1="71" y1="40.95" x2="86" y2="14.97"></line><line x1="79.05" y1="49" x2="105.03" y2="34"></line></g><g fill="#ffd23f"><circle cx="116" cy="60" r="2.4"></circle><circle cx="108.5" cy="88" r="2.4"></circle><circle cx="88" cy="108.5" r="2.4"></circle><circle cx="60" cy="116" r="2.4"></circle><circle cx="32" cy="108.5" r="2.4"></circle><circle cx="11.5" cy="88" r="2.4"></circle><circle cx="4" cy="60" r="2.4"></circle><circle cx="11.5" cy="32" r="2.4"></circle><circle cx="32" cy="11.5" r="2.4"></circle><circle cx="60" cy="4" r="2.4"></circle><circle cx="88" cy="11.5" r="2.4"></circle><circle cx="108.5" cy="32" r="2.4"></circle></g></svg></span><span aria-hidden="true" class="deco deco-float deco-desktop" style="bottom:16%;left:4%;width:52px;--rot:0deg"><svg class="" viewBox="0 0 70 70" aria-hidden="true"><path d="M35 5l8 20 22 2-17 14 6 21-19-12-19 12 6-21L5 27l22-2Z" fill="none" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"></path></svg></span><span aria-hidden="true" class="deco deco-float deco-desktop" style="top:56%;right:5%;width:62px;--rot:-8deg"><svg class="" viewBox="0 0 74 118" aria-hidden="true"><rect x="10" y="54" width="54" height="58" rx="11" fill="#ff8ac2" stroke="#fff" stroke-width="5"></rect><rect x="8" y="6" width="58" height="58" rx="11" fill="#ff6fb3" stroke="#fff" stroke-width="5" transform="rotate(-3 37 35)"></rect><rect x="17" y="15" width="40" height="34" rx="5" fill="#ffe3f1" transform="rotate(-3 37 32)"></rect><path d="M37 44c-6-4-10-7-10-12 0-3 3-6 6-6 2 0 4 1 4 3 1-2 3-3 5-3 4 0 6 3 6 6 0 5-5 8-11 12Z" fill="#ff3b8d" transform="rotate(-3 37 32)"></path><g fill="#ffd0e6"><circle cx="24" cy="72" r="3.5"></circle><circle cx="37" cy="72" r="3.5"></circle><circle cx="50" cy="72" r="3.5"></circle><circle cx="24" cy="85" r="3.5"></circle><circle cx="37" cy="85" r="3.5"></circle><circle cx="50" cy="85" r="3.5"></circle><circle cx="24" cy="98" r="3.5"></circle><circle cx="37" cy="98" r="3.5"></circle><circle cx="50" cy="98" r="3.5"></circle></g></svg></span><span aria-hidden="true" class="deco deco-float deco-desktop" style="top:6%;right:26%;width:118px;--rot:0deg"><svg class="" viewBox="0 0 140 80" aria-hidden="true"><path d="M6 46l128-30c6-1 8 3 3 6L54 66c-3 2-6 2-8 0l-9-9-12 5-3-6 9-8-24-3c-4-1-4-3-1-4Z" fill="#f2f4f8" stroke="#c9d2de" stroke-width="3" stroke-linejoin="round"></path><path d="M70 34l22 4-16 12Z" fill="#d7dee8"></path></svg></span><span aria-hidden="true" class="deco deco-float" style="bottom:8%;right:12%;width:44px;--rot:12deg"><svg class="" viewBox="0 0 70 70" aria-hidden="true"><path d="M35 5l8 20 22 2-17 14 6 21-19-12-19 12 6-21L5 27l22-2Z" fill="none" stroke="#ffd23f" stroke-width="3" stroke-linejoin="round"></path></svg></span><div class="explainer-inner"><div class="reveal"><span class="how-eyebrow">wait — what even is Ditto?</span><h2 id="what-is-ditto">Dating for college students,<!-- --> <em class="scribbled">without the swiping.<svg class="scribble-line" viewBox="0 0 480 60" aria-hidden="true" preserveAspectRatio="none"><path d="M8 34C120 8 340 8 452 26c14 3 20 10 8 16-120 18-300 14-372 2" fill="none" stroke="#ff2e63" stroke-width="7" stroke-linecap="round"></path></svg></em></h2></div><div class="reveal" style="transition-delay:90ms"><p class="explainer-lead">Every Wednesday, Ditto finds you a real date with someone actually worth meeting — then sets the whole thing up. That&#x27;s the thing you&#x27;re getting your friends into.</p></div><div class="reveal" style="transition-delay:180ms"><ul class="explainer-list"><li><b>No app to download.</b> It all happens over text.</li><li><b>No swiping, no small talk.</b> You get a match, not a feed.</li><li><b>Real dates, on your campus.</b> Every Wednesday, plans included.</li></ul></div></div></section>
   <section class="faq" aria-labelledby="faq-title"><span aria-hidden="true" class="deco deco-float deco-desktop" style="top:8%;left:5%;width:74px;--rot:-12deg"><svg class="" viewBox="0 0 110 96" aria-hidden="true"><path d="M20 8h70a16 16 0 0 1 16 16v34a16 16 0 0 1-16 16H44l-22 18 4-18h-6A16 16 0 0 1 4 58V24A16 16 0 0 1 20 8Z" fill="#2f9bff" stroke="#fff" stroke-width="6" stroke-linejoin="round"></path><path d="M55 56C42 47 35 41 35 33c0-6 5-10 10-10 4 0 8 2 10 6 2-4 6-6 10-6 5 0 10 4 10 10 0 8-7 14-20 23Z" fill="#fff"></path></svg></span><span aria-hidden="true" class="deco deco-float deco-desktop" style="top:30%;right:4%;width:106px;--rot:8deg"><svg class="" viewBox="0 0 120 90" aria-hidden="true" fill="none" stroke="#ff5fa2" stroke-width="3"><path d="M18 44c-9-7-14-11-14-19 0-6 5-10 11-10 4 0 7 2 9 6 2-4 5-6 9-6 6 0 11 4 11 10 0 8-9 13-18 21" stroke-linejoin="round"></path><path d="M70 30c-6-5-10-8-10-13 0-4 3-7 8-7 3 0 5 1 7 4 2-3 4-4 7-4 4 0 7 3 7 7 0 5-6 9-12 15" stroke-linejoin="round"></path><path d="M100 62c-4-3-7-5-7-9 0-3 2-5 5-5 2 0 4 1 5 3 1-2 3-3 5-3 3 0 5 2 5 5 0 4-4 6-8 10" stroke-linejoin="round"></path></svg></span><span aria-hidden="true" class="deco deco-float deco-desktop" style="bottom:18%;left:4%;width:46px;--rot:-6deg"><svg class="" viewBox="0 0 72 96" aria-hidden="true"><path d="M16 26h40l-5 60c-.4 5-4 8-9 8H30c-5 0-8.6-3-9-8Z" fill="#fff" stroke="#111" stroke-width="3.5" stroke-linejoin="round"></path><rect x="12" y="18" width="48" height="12" rx="4" fill="#f3ead9" stroke="#111" stroke-width="3.5"></rect><rect x="18" y="52" width="36" height="20" rx="4" fill="#e8a06b" stroke="#111" stroke-width="3"></rect><path d="M28 12c0-4 4-4 4-8M40 12c0-4 4-4 4-8" stroke="#c9c2b5" stroke-width="3" fill="none" stroke-linecap="round"></path></svg></span><span aria-hidden="true" class="deco deco-desktop" style="bottom:6%;right:8%;width:84px;--rot:10deg"><svg class="" viewBox="0 0 120 90" aria-hidden="true"><path d="M8 14C50 6 96 26 104 70" fill="none" stroke="#8a2be2" stroke-width="5" stroke-linecap="round"></path><path d="M104 70l-18-8M104 70l4-19" fill="none" stroke="#8a2be2" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><div class="faq-inner"><div class="reveal"><span class="how-eyebrow">the fine print, in plain english</span><h2 id="faq-title">Questions,<!-- --> <em class="scribbled">answered.<svg class="scribble-line" viewBox="0 0 480 60" aria-hidden="true" preserveAspectRatio="none"><path d="M8 34C120 8 340 8 452 26c14 3 20 10 8 16-120 18-300 14-372 2" fill="none" stroke="#ffd23f" stroke-width="7" stroke-linecap="round"></path></svg></em></h2></div><div class="faq-list"><div class="reveal"><details class="faq-item"><summary><span>What counts as a referral?</span><span class="faq-marker" aria-hidden="true"></span></summary><div class="faq-answer">Someone new who uses your link or code and finishes signing up for Ditto — that means texting Ditto and completing their profile. Clicks alone don&#x27;t count, and neither does someone who was already a Ditto user.</div></details></div><div class="reveal" style="transition-delay:45ms"><details class="faq-item"><summary><span>When do I get paid?</span><span class="faq-marker" aria-hidden="true"></span></summary><div class="faq-answer">Roughly a week after your friend finishes signing up. Your dashboard shows what&#x27;s pending, what&#x27;s ready, and what&#x27;s already been paid.</div></details></div><div class="reveal" style="transition-delay:90ms"><details class="faq-item"><summary><span>How do I actually get the money?</span><span class="faq-marker" aria-hidden="true"></span></summary><div class="faq-answer">Through <b>Stripe</b>. You get a dashboard the moment you claim your link, so you can watch your referrals land from the start.</div></details></div><div class="reveal" style="transition-delay:135ms"><details class="faq-item"><summary><span>Is there a limit to how much I can earn?</span><span class="faq-marker" aria-hidden="true"></span></summary><div class="faq-answer">No cap. Refer as many people as you like — the leaderboard exists because people go big.</div></details></div><div class="reveal" style="transition-delay:180ms"><details class="faq-item"><summary><span>Can I refer myself?</span><span class="faq-marker" aria-hidden="true"></span></summary><div class="faq-answer">Yes — claim your link, use it to sign yourself up for Ditto, and that counts. It counts <b>once</b>, since each person can only be referred a single time.</div></details></div><div class="reveal" style="transition-delay:225ms"><details class="faq-item"><summary><span>My friend signed up but I don&#x27;t see it yet</span><span class="faq-marker" aria-hidden="true"></span></summary><div class="faq-answer">It shows as <b>started signup</b> until they finish their profile, then flips to <b>qualified</b>. If they signed up without your link, we can&#x27;t attribute it after the fact — the link or code has to be used at sign-up.</div></details></div><div class="reveal" style="transition-delay:270ms"><details class="faq-item"><summary><span>How am I allowed to share it?</span><span class="faq-marker" aria-hidden="true"></span></summary><div class="faq-answer">However you want — texts, group chats, your own posts, flyers around campus. It&#x27;s your link. Just don&#x27;t invent features or prices Ditto doesn&#x27;t offer.</div></details></div><div class="reveal" style="transition-delay:270ms"><details class="faq-item"><summary><span>Do I have to be a student?</span><span class="faq-marker" aria-hidden="true"></span></summary><div class="faq-answer">No — anyone can take part and share a link. Ditto itself is built for American college students, so that&#x27;s who your friends need to be for a referral to qualify.</div></details></div><div class="reveal" style="transition-delay:270ms"><details class="faq-item"><summary><span>What about taxes?</span><span class="faq-marker" aria-hidden="true"></span></summary><div class="faq-answer">Referral rewards may count as income depending on where you live and how much you earn. We can&#x27;t give tax advice — if you earn a lot, keep your own records.</div></details></div></div><p class="faq-more">Still stuck? Email<!-- --> <a href="mailto:team@ditto.ai">team@ditto.ai</a> and a human will get back to you.</p></div></section>
-  <footer class="site-footer"><span aria-hidden="true" class="deco deco-float deco-desktop" style="top:24%;left:42%;width:34px;--rot:-14deg"><svg class="" viewBox="0 0 100 92" aria-hidden="true"><path d="M50 88C20 66 4 50 4 30 4 14 16 4 30 4c9 0 16 4 20 12 4-8 11-12 20-12 14 0 26 10 26 26 0 20-16 36-46 58Z" fill="#ff2e63" stroke="#fff" stroke-width="6" stroke-linejoin="round"></path></svg></span><div class="footer-inner"><div class="footer-brand"><img class="footer-wordmark" src="ditto-wordmark.png" alt="Ditto" width="900" height="305"/><p class="footer-tagline">get a date every wednesday</p></div><nav class="footer-links" aria-label="Footer"><a href="#faq-title">Program terms</a><a href="mailto:team@ditto.ai">Support</a><a href="https://ditto.ai" target="_blank" rel="noreferrer noopener">About Ditto ↗</a></nav></div><p class="footer-legal">Play Cupid and Get Paid is Ditto&#x27;s referral program. Rewards are subject to the <a href="#faq-title">program terms</a>.</p></footer>
+  <div class="reveal"><section class="cta-band cta-band-end"><div class="cta-band-inner"><span class="band-kicker">one link, that’s the whole job</span><h2>Your friends are <em>one text</em> away.</h2><p>You pick your own link ending, we hand you a message you can edit, and your dashboard tracks every sign-up that lands.</p><div class="band-actions"><button class="banner-cta" data-panel="referral">Claim your link <span aria-hidden="true">💘</span></button><button class="ghost-pill" data-panel="leaderboard"><span aria-hidden="true">🏆</span> <span class="label">See the leaderboard</span></button></div><p class="band-note">we’ll even write the text for you</p></div></section></div>
+  <footer class="site-footer"><span aria-hidden="true" class="deco deco-float deco-desktop" style="top:24%;left:42%;width:34px;--rot:-14deg"><svg class="" viewBox="0 0 100 92" aria-hidden="true"><path d="M50 88C20 66 4 50 4 30 4 14 16 4 30 4c9 0 16 4 20 12 4-8 11-12 20-12 14 0 26 10 26 26 0 20-16 36-46 58Z" fill="#ff2e63" stroke="#fff" stroke-width="6" stroke-linejoin="round"></path></svg></span><div class="footer-inner"><div class="footer-brand"><a class="footer-wordmark-link" href="https://ditto.ai" target="_blank" rel="noreferrer noopener" aria-label="Ditto — visit ditto.ai"><img class="footer-wordmark" src="ditto-wordmark.png" alt="Ditto" width="900" height="305"/></a><p class="footer-tagline">get a date every wednesday</p></div><nav class="footer-links" aria-label="Footer"><a href="#faq-title">Program terms</a><a href="mailto:team@ditto.ai">Support</a><a href="https://ditto.ai" target="_blank" rel="noreferrer noopener">About Ditto ↗</a></nav></div><p class="footer-legal">Play Cupid and Get Paid is Ditto&#x27;s referral program. Rewards are subject to the <a href="#faq-title">program terms</a>.</p></footer>
+</div>
+
+<div class="sticky-cta" id="stickyCta">
+  <button class="ghost-pill" data-panel="leaderboard" tabindex="-1" aria-hidden="true"><span aria-hidden="true">🏆</span> <span class="label">Leaderboard</span></button>
+  <button class="banner-cta" data-panel="referral" tabindex="-1" aria-hidden="true">Claim your link <span aria-hidden="true">💘</span></button>
 </div>
 
 <div class="panel-backdrop" id="backdrop" hidden></div>
@@ -2200,8 +2574,16 @@ body {
     <input id="email" name="email" type="email" placeholder="angella@usc.edu" autocomplete="email" />
     <span class="field-error" data-error="email"></span>
     <label for="school">Your school</label>
-    <input id="school" name="school" type="text" placeholder="University of Southern California" />
+    <input id="school" name="school" type="text" list="school-options" placeholder="University of Southern California" />
+    <datalist id="school-options"></datalist>
     <span class="field-error" data-error="school"></span>
+    <label for="vanity">Your link ending <span class="field-optional">— optional</span></label>
+    <div class="vanity-row" id="vanityRow">
+      <span class="prefix" aria-hidden="true">/r/</span>
+      <input id="vanity" name="vanity" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="angella" aria-describedby="vanity-hint" />
+    </div>
+    <span class="field-error" data-error="vanity"></span>
+    <span class="field-hint" id="vanity-hint">Pick the words people will read out loud — or leave it blank and we'll build one from your name.</span>
     <button class="primary-button full-width" type="submit">Generate my link <span aria-hidden="true">↗</span></button>
   </form>
   <div class="success-state" id="successState" hidden>
@@ -2209,7 +2591,14 @@ body {
     <h3>Your cupid link is ready.</h3>
     <p>Save it somewhere safe — copy it below, or sign in with <strong id="confirmedEmail"></strong> any time to get it back.</p>
     <div class="link-box link-box-plain"><input id="generatedLink" type="text" readonly aria-label="Your referral link" /></div>
+    <div class="share-kit">
+      <span class="share-kit-label">What to send</span>
+      <div class="tmpl-chips" id="tmplChips" role="group" aria-label="Message starting points"></div>
+      <textarea id="shareMessage" class="share-message" rows="3" aria-label="Message to send with your link"></textarea>
+      <span class="share-kit-note">your link gets stuck on the end automatically</span>
+    </div>
     <div class="share-row">
+      <button type="button" class="share-btn" id="copyMsgBtn"><span aria-hidden="true">📝</span> Copy message</button>
       <button type="button" class="share-btn" id="copyBtn"><span aria-hidden="true">🔗</span> Copy link</button>
       <a class="share-btn" id="smsBtn" href="#"><span aria-hidden="true">💬</span> iMessage</a>
       <button type="button" class="share-btn" id="shareBtn"><span aria-hidden="true">↗</span> Share…</button>
@@ -2223,6 +2612,10 @@ body {
   <span class="panel-kicker">live campus rankings</span>
   <h2>Top <em>Cupids</em></h2>
   <p class="panel-copy">Rankings are based on confirmed Ditto sign-ups.</p>
+  <div class="board-scope">
+    <select id="scopeSelect" aria-label="Which campus to rank"><option value="">Every campus</option></select>
+    <button type="button" class="scope-mine" id="scopeMine" hidden>My campus</button>
+  </div>
   <div class="leaderboard-tabs" role="tablist">
     <button class="tab-button active" data-range="all" role="tab" aria-selected="true">All time</button>
     <button class="tab-button" data-range="month" role="tab" aria-selected="false">This month</button>
@@ -2251,6 +2644,7 @@ body {
     panels[name].classList.add("open");
     panels[name].setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
+    document.body.classList.add("panel-open");
     if (name === "leaderboard") renderBoard();
   }
   function closeAll() {
@@ -2260,6 +2654,7 @@ body {
       panels[k].classList.remove("open"); panels[k].setAttribute("aria-hidden", "true");
     });
     document.body.style.overflow = "";
+    document.body.classList.remove("panel-open");
   }
   document.querySelectorAll("[data-panel]").forEach(function (b) {
     b.addEventListener("click", function () { open(b.getAttribute("data-panel")); });
@@ -2267,6 +2662,33 @@ body {
   document.querySelectorAll("[data-close]").forEach(function (b) { b.addEventListener("click", closeAll); });
   backdrop.addEventListener("click", closeAll);
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeAll(); });
+
+  /* ---- Persistent CTA: takes over once the hero's button scrolls away ---- */
+  var heroCta = document.getElementById("heroCta");
+  var stickyCta = document.getElementById("stickyCta");
+  function setSticky(on) {
+    stickyCta.classList.toggle("show", on);
+    [].slice.call(stickyCta.children).forEach(function (b) {
+      b.setAttribute("tabindex", on ? "0" : "-1");
+      b.setAttribute("aria-hidden", on ? "false" : "true");
+    });
+  }
+  if (heroCta && "IntersectionObserver" in window) {
+    new IntersectionObserver(function (entries) {
+      setSticky(!entries[0].isIntersecting);
+    }, { threshold: 0 }).observe(heroCta);
+  } else {
+    setSticky(true);
+  }
+
+  /* ---- Remembered campus: powers the board's default scope and the form ---- */
+  var SCHOOL_KEY = "cupid.school";
+  function storedSchool() {
+    try { return localStorage.getItem(SCHOOL_KEY) || ""; } catch (e) { return ""; }
+  }
+  function rememberSchool(s) {
+    try { localStorage.setItem(SCHOOL_KEY, s); } catch (e) { /* private mode */ }
+  }
 
   /* ---- Scroll reveal (mirrors the app's Reveal component) ---- */
   var reveals = [].slice.call(document.querySelectorAll(".reveal"));
@@ -2285,7 +2707,62 @@ body {
   var form = document.getElementById("referralForm");
   var success = document.getElementById("successState");
   var linkInput = document.getElementById("generatedLink");
-  var SHARE_TEXT = "I'm playing cupid on Ditto — sign up with my link:";
+  var msgBox = document.getElementById("shareMessage");
+  var chipWrap = document.getElementById("tmplChips");
+
+  /* Starting points, not scripts — the box below them is editable. Every claim
+     matches the page: a real date every Wednesday, over text, plans included. */
+  var TEMPLATES = [
+    { id: "group", label: "Group chat", text: "ok hear me out — Ditto sets you up on a real date every Wednesday. no app, it all happens over text. use my link:" },
+    { id: "friend", label: "One friend", text: "you'd actually like this: Ditto finds you a date every Wednesday and makes the plans for you. sign up with my link:" },
+    { id: "story", label: "IG story", text: "playing cupid this semester 💘 Ditto sets you up on a date every Wednesday — my link:" },
+    { id: "plain", label: "Straight up", text: "I'm playing cupid on Ditto — sign up with my link:" }
+  ];
+  var currentTmpl = TEMPLATES[0].id;
+
+  function outgoing() { return msgBox.value.trim() + " " + linkInput.value; }
+  function syncShare() {
+    document.getElementById("smsBtn").href = "sms:&body=" + encodeURIComponent(outgoing());
+  }
+  function renderChips() {
+    chipWrap.innerHTML = "";
+    TEMPLATES.forEach(function (t) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "tmpl-chip" + (t.id === currentTmpl ? " active" : "");
+      b.textContent = t.label;
+      b.addEventListener("click", function () {
+        currentTmpl = t.id;
+        msgBox.value = t.text;
+        renderChips();
+        syncShare();
+      });
+      chipWrap.appendChild(b);
+    });
+  }
+  msgBox.addEventListener("input", syncShare);
+
+  /* ---- Custom link ending ---- */
+  var vanityInput = document.getElementById("vanity");
+  var vanityHint = document.getElementById("vanity-hint");
+  var VANITY_HINT_BLANK = vanityHint.innerHTML;
+  function cleanVanity(v) {
+    return v.toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/-{2,}/g, "-").replace(/^-/, "").slice(0, 24);
+  }
+  vanityInput.addEventListener("input", function () {
+    var v = cleanVanity(vanityInput.value);
+    if (v !== vanityInput.value) vanityInput.value = v;
+    if (v) {
+      vanityHint.textContent = "";
+      var lead = document.createTextNode("Your code will be ");
+      var strong = document.createElement("b");
+      strong.textContent = v;
+      vanityHint.appendChild(lead);
+      vanityHint.appendChild(strong);
+    } else {
+      vanityHint.innerHTML = VANITY_HINT_BLANK;
+    }
+  });
 
   function slug(n) {
     var s = n.toLowerCase().replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-").slice(0, 24);
@@ -2311,9 +2788,15 @@ body {
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err("email", "Enter a valid email address."); ok = false; }
     else err("email", "");
     err("school", school ? "" : "Please enter your school."); if (!school) ok = false;
+    var wanted = cleanVanity(vanityInput.value).replace(/-+$/, "");
+    if (wanted && wanted.length < 3) { err("vanity", "Use at least 3 characters, or leave it blank."); ok = false; }
+    else err("vanity", "");
     if (!ok) return;
 
-    var code = slug(name) + "-" + token(6);
+    // Their own ending if they picked one, otherwise one built from their name.
+    var code = wanted || slug(name) + "-" + token(6);
+    rememberSchool(school);
+    fillSchoolPickers();
     // Mirror the real flow: hand off to the "your link is ready" page.
     if (window.__READY_PAGE) {
       window.location.href = window.__READY_PAGE + "?code=" + encodeURIComponent(code);
@@ -2322,38 +2805,60 @@ body {
     var link = "https://ditto.ai/?utm_source=cupid&utm_medium=referral&utm_campaign=play-cupid&ref=" + code;
     linkInput.value = link;
     document.getElementById("confirmedEmail").textContent = email;
-    document.getElementById("smsBtn").href = "sms:&body=" + encodeURIComponent(SHARE_TEXT + " " + link);
+    msgBox.value = TEMPLATES[0].text;
+    currentTmpl = TEMPLATES[0].id;
+    renderChips();
+    syncShare();
     form.hidden = true; success.hidden = false;
     toast("Your link is ready 💘");
   });
-  function copyLink() {
-    // Feedback first: the clipboard promise can hang on a pending permission
-    // prompt, which would leave the tap looking dead.
-    linkInput.select();
+  /**
+   * Feedback fires first: the clipboard promise can hang on a pending
+   * permission prompt, which would leave the tap looking dead. selectEl is
+   * the field holding this text, so a manual copy still works if the API is
+   * unavailable.
+   */
+  function copyText(text, selectEl, btn, doneHtml, restoreHtml, toastMsg) {
+    if (selectEl) selectEl.select();
     try {
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(linkInput.value).catch(function () {
+        navigator.clipboard.writeText(text).catch(function () {
           try { document.execCommand("copy"); } catch (e) {}
         });
       } else { document.execCommand("copy"); }
     } catch (e) {}
-    var b = document.getElementById("copyBtn");
-    b.classList.add("copied");
-    b.innerHTML = '<span aria-hidden="true">🔗</span> Copied!';
+    btn.classList.add("copied");
+    btn.innerHTML = doneHtml;
     setTimeout(function () {
-      b.classList.remove("copied");
-      b.innerHTML = '<span aria-hidden="true">🔗</span> Copy link';
+      btn.classList.remove("copied");
+      btn.innerHTML = restoreHtml;
     }, 1600);
-    toast("Link copied to clipboard!");
+    toast(toastMsg);
   }
-  document.getElementById("copyBtn").addEventListener("click", copyLink);
+  var copyBtn = document.getElementById("copyBtn");
+  var copyMsgBtn = document.getElementById("copyMsgBtn");
+  function copyLink() {
+    copyText(linkInput.value, linkInput, copyBtn,
+      '<span aria-hidden="true">🔗</span> Copied!',
+      '<span aria-hidden="true">🔗</span> Copy link',
+      "Link copied to clipboard!");
+  }
+  copyBtn.addEventListener("click", copyLink);
+  copyMsgBtn.addEventListener("click", function () {
+    copyText(outgoing(), msgBox, copyMsgBtn,
+      '<span aria-hidden="true">📝</span> Copied!',
+      '<span aria-hidden="true">📝</span> Copy message',
+      "Message copied!");
+  });
   document.getElementById("shareBtn").addEventListener("click", function () {
-    if (navigator.share) { navigator.share({ title: "Play Cupid on Ditto", text: SHARE_TEXT, url: linkInput.value }).catch(function () {}); }
+    if (navigator.share) { navigator.share({ title: "Play Cupid on Ditto", text: msgBox.value.trim(), url: linkInput.value }).catch(function () {}); }
     else copyLink();
   });
   document.getElementById("againBtn").addEventListener("click", function () {
     success.hidden = true; form.hidden = false; form.reset();
-    err("name", ""); err("email", ""); err("school", "");
+    err("name", ""); err("email", ""); err("school", ""); err("vanity", "");
+    vanityHint.innerHTML = VANITY_HINT_BLANK;
+    fillSchoolPickers();
   });
 
   /* ---- Leaderboard (demo data) ---- */
@@ -2368,11 +2873,72 @@ body {
     { name: "Jamal Carter", school: "Georgia Tech", all: 11, month: 6 }
   ];
   var range = "all", medals = ["🥇", "🥈", "🥉"];
+
+  /* ---- Campus filter: both pickers are fed from the same list of schools ---- */
+  var scopeSelect = document.getElementById("scopeSelect");
+  var scopeMine = document.getElementById("scopeMine");
+  var schoolInput = document.getElementById("school");
+  var scope = "";
+  function fillSchoolPickers() {
+    var schools = [];
+    SAMPLE.forEach(function (p) { if (schools.indexOf(p.school) < 0) schools.push(p.school); });
+    var mine = storedSchool();
+    // Their own campus stays selectable even with nobody on its board yet.
+    if (mine && schools.indexOf(mine) < 0) schools.push(mine);
+    schools.sort();
+
+    scopeSelect.innerHTML = "";
+    var every = document.createElement("option");
+    every.value = ""; every.textContent = "Every campus";
+    scopeSelect.appendChild(every);
+    var datalist = document.getElementById("school-options");
+    datalist.innerHTML = "";
+    schools.forEach(function (s) {
+      var o = document.createElement("option");
+      o.value = s; o.textContent = s;
+      scopeSelect.appendChild(o);
+      var d = document.createElement("option");
+      d.value = s;
+      datalist.appendChild(d);
+    });
+
+    if (mine) {
+      scopeMine.hidden = false;
+      scope = mine;
+      if (!schoolInput.value) schoolInput.value = mine;
+    }
+    scopeSelect.value = scope;
+    scopeMine.classList.toggle("active", Boolean(scope) && scope === mine);
+  }
+  scopeSelect.addEventListener("change", function () {
+    scope = scopeSelect.value;
+    scopeMine.classList.toggle("active", Boolean(scope) && scope === storedSchool());
+    renderBoard();
+  });
+  scopeMine.addEventListener("click", function () {
+    var mine = storedSchool();
+    scope = scope === mine ? "" : mine;
+    scopeSelect.value = scope;
+    scopeMine.classList.toggle("active", Boolean(scope));
+    renderBoard();
+  });
+
   function renderBoard() {
-    var rows = SAMPLE.map(function (p) { return { name: p.name, school: p.school, n: p[range] }; })
+    var rows = SAMPLE
+      .filter(function (p) { return !scope || p.school === scope; })
+      .map(function (p) { return { name: p.name, school: p.school, n: p[range] }; })
       .sort(function (a, b) { return b.n - a.n; });
     var top = document.getElementById("topThree"), list = document.getElementById("leaderboardList");
     top.innerHTML = ""; list.innerHTML = "";
+    if (!rows.length) {
+      var empty = document.createElement("p");
+      empty.className = "leaderboard-empty";
+      empty.textContent = scope
+        ? "No confirmed referrals at " + scope + " yet — be the first cupid on that board."
+        : "No confirmed referrals yet — be the first cupid on the board.";
+      list.appendChild(empty);
+      return;
+    }
     rows.slice(0, 3).forEach(function (e, i) {
       var d = document.createElement("div");
       d.className = "podium rank-" + (i + 1);
@@ -2393,6 +2959,9 @@ body {
       range = b.getAttribute("data-range"); renderBoard();
     });
   });
+
+  renderChips();
+  fillSchoolPickers();
 })();
 </script>
 
