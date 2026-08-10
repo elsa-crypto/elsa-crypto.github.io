@@ -288,6 +288,50 @@ body {
   box-shadow: 1px 1px 0 var(--ink);
   transition-duration: 0.05s;
 }
+/* Speech-bubble sticker in the hero sky: the one hard number ($3) the
+   artwork itself doesn't say. Positioned against .frame like the CTA,
+   so the hero's fixed aspect ratio keeps the percentage stable. */
+.hero-bubble {
+  position: absolute;
+  top: 18.5%;
+  left: 52%;
+  z-index: 24;
+  transform: translateX(-50%) rotate(-3deg);
+  background: #fff;
+  border: 3px solid var(--ink);
+  border-radius: 999px;
+  padding: 13px 26px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(16px, 2vw, 26px);
+  line-height: 1;
+  color: var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  white-space: nowrap;
+  pointer-events: none;
+}
+.hero-bubble b {
+  color: var(--accent-text);
+}
+/* Tail: ink triangle behind (doubles as border + hard shadow), white in front. */
+.hero-bubble::before,
+.hero-bubble::after {
+  content: "";
+  position: absolute;
+  border-style: solid;
+}
+.hero-bubble::before {
+  left: 34px;
+  bottom: -17px;
+  border-width: 18px 18px 0 0;
+  border-color: var(--ink) transparent transparent transparent;
+}
+.hero-bubble::after {
+  left: 38px;
+  bottom: -10px;
+  border-width: 13px 13px 0 0;
+  border-color: #fff transparent transparent transparent;
+}
 
 /* ============================================================
    Persistent CTA — the hero button scrolls away with the artwork, so this
@@ -1048,6 +1092,14 @@ body.panel-open .sticky-cta {
      so the CTA moves with it. */
   .cta-strip {
     top: 56%;
+  }
+  /* Portrait art: the open sky sits between the nav pills and the flip
+     phone, so the bubble tucks in there, centered. */
+  .hero-bubble {
+    top: 14.5%;
+    left: 53%;
+    font-size: 17px;
+    padding: 11px 20px;
   }
 }
 
@@ -2189,6 +2241,7 @@ body.panel-open .sticky-cta {
       <h1 class="sr-only">Play Cupid and Get Paid</h1>
       <nav class="top-nav"><button class="pill" data-panel="leaderboard"><span class="thumb"><svg class="" viewBox="0 0 60 60" aria-hidden="true"><path d="M30 2c3 16 12 25 28 28-16 3-25 12-28 28-3-16-12-25-28-28C18 27 27 18 30 2Z" fill="#fff5e9" stroke="#111" stroke-width="3" stroke-linejoin="round"></path></svg></span><span class="label">Leaderboard</span></button><button class="pill" data-panel="referral"><span class="thumb"><svg class="" viewBox="0 0 100 92" aria-hidden="true"><path d="M50 88C20 66 4 50 4 30 4 14 16 4 30 4c9 0 16 4 20 12 4-8 11-12 20-12 14 0 26 10 26 26 0 20-16 36-46 58Z" fill="#ff2e63" stroke="#fff" stroke-width="6" stroke-linejoin="round"></path></svg></span><span class="label">Get your link</span></button></nav>
     </section>
+    <div class="hero-bubble"><span>refer a friend and get <b>$3</b></span></div>
     <div class="cta-strip" id="heroCta">
       <button class="banner-cta" data-panel="referral">Claim your link <span aria-hidden="true">💘</span></button>
       <a class="cta-brand" href="https://ditto.ai" target="_blank" rel="noreferrer noopener" aria-label="Ditto, visit ditto.ai"><span aria-hidden="true">powered by</span><img src="ditto-wordmark.png" alt="Ditto" width="900" height="305" /></a>
