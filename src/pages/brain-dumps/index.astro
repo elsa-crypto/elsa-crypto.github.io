@@ -1,13 +1,34 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PageHeader from "../../components/PageHeader.astro";
+import { thoughts } from "../../data/thoughts";
 ---
 
 <BaseLayout
   title="brain dumps — Elsa Cai"
-  description="Half-formed thoughts from Elsa Cai — coming soon."
+  description="Half-formed thoughts from Elsa Cai, posted before they're polished."
 >
-  <PageHeader title="brain dumps" eyebrow="my thoughts" />
+  <PageHeader title="brain dumps" eyebrow="my thoughts">
+    half-formed thoughts, posted before they're polished.
+  </PageHeader>
 
-  <p class="mt-8 text-[1.08rem] text-muted">coming soon</p>
+  <ul class="mt-8 list-none p-0">
+    {
+      thoughts.map((t) => (
+        <li class="border-b border-line last:border-b-0">
+          <a
+            href={`/brain-dumps/${t.slug}`}
+            class="row-hover group flex items-baseline justify-between gap-4 py-4"
+          >
+            <span class="text-[1.08rem] text-ink transition-colors group-hover:text-accent">
+              {t.title}
+            </span>
+            {t.date && (
+              <span class="shrink-0 text-[0.85rem] text-faint">{t.date}</span>
+            )}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
 </BaseLayout>
