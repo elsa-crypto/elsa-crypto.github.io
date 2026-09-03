@@ -4,6 +4,8 @@ export interface Thought {
   date?: string;
   /** One paragraph per string. */
   body: string[];
+  /** Archived posts are listed under a small "archive" section on /brain-dumps. */
+  archived?: boolean;
 }
 
 // Brain dumps / essays. Newest first (top of the array).
@@ -27,6 +29,7 @@ export const thoughts: Thought[] = [
     slug: "female-in-startups",
     title: "first dump: female in startups",
     date: "june 2026",
+    archived: true,
     body: [
       "i'm sitting on a plane to hawaii right now, building this site. honestly i just want to use the quiet to reflect on everything that's changed lately, and to prove to myself i'm still a functional human with thoughts.",
       "a year ago i dropped out of usc. real estate finance, my dream school, junior year, 3.9 gpa. the kind of thing you're not really supposed to walk away from. i left to move to sf and work at early stage startups, because i wanted a kind of freedom the safe path was never going to give me.",
